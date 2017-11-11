@@ -41,12 +41,23 @@ jQuery(document).ready(function ($) {
         </script>
     </h:head>
     <h:body>
-        <audio controls="controls" controlsList="nodownload">
-            <source src="Avivamento.mp3" type="audio/mpeg" />
-        </audio>
+        
+        <ui:fragment rendered="true">
+            <audio controls="controls" controlsList="nodownload">
+                <source src="Avivamento.mp3" type="audio/mpeg" />
+            </audio>
+       </ui:fragment>
+        
+        <ui:fragment rendered="false">
+            <video width="320" height="240" controls="controls" controlsList="nodownload">
+                <source src="teste.mp4" type="video/mp4"/>
+            </video>  
+       </ui:fragment>
+        
+        
+        
         <!-- header -->
         <ui:insert name="header">
-        
             <ui:include src="includes/header.xhtml"/>
         </ui:insert>
         <ui:insert name="header2">
