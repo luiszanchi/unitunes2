@@ -46,34 +46,49 @@ public abstract class Dao<T, I extends Serializable> {
     }
 
     ;
-    public void adicionar(T item) {
-        this.conectar();
-        EntityManager em = this.getEntityManager();
-        em.getTransaction().begin();
-        em.persist(item);
-        em.getTransaction().commit();
-        em.close();
-        this.close();
+    public Boolean adicionar(T item) {
+        try {
+            this.conectar();
+            EntityManager em = this.getEntityManager();
+            em.getTransaction().begin();
+            em.persist(item);
+            em.getTransaction().commit();
+            em.close();
+            this.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    public void atualizar(T item) {
-        this.conectar();
-        EntityManager em = this.getEntityManager();
-        em.getTransaction().begin();
-        em.merge(item);
-        em.getTransaction().commit();
-        em.close();
-        this.close();
+    public Boolean atualizar(T item) {
+        try {
+            this.conectar();
+            EntityManager em = this.getEntityManager();
+            em.getTransaction().begin();
+            em.merge(item);
+            em.getTransaction().commit();
+            em.close();
+            this.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    public void excluit(T item) {
-        this.conectar();
-        EntityManager em = this.getEntityManager();
-        em.getTransaction().begin();
-        em.remove(em.contains(item) ? item : em.merge(item));
-        em.getTransaction().commit();
-        em.close();
-        this.close();
+    public Boolean excluit(T item) {
+        try {
+            this.conectar();
+            EntityManager em = this.getEntityManager();
+            em.getTransaction().begin();
+            em.remove(em.contains(item) ? item : em.merge(item));
+            em.getTransaction().commit();
+            em.close();
+            this.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public List<T> getList() {
@@ -116,6 +131,5 @@ public abstract class Dao<T, I extends Serializable> {
         this.close();
         return retorno;
     }
-
 
 }

@@ -23,11 +23,95 @@ import javax.annotation.PostConstruct;
 @ViewScoped
 public class UsuariosBean implements Serializable{
     private List<Usuario> usuarios;
-    @ManagedProperty(value = "#{usersBO}")
+    
     private GerenciarUsuariosService gerenciarUsuariosService;
+   
+    private Usuario user = new Usuario();
+   
+    private Usuario userEdit;
+    private Long userEditPK;
+    
+    private Usuario userDelete;
+    private long userDeletePK;
+
+    public Usuario getUserDelete() {
+        return userDelete;
+    }
+
+    public void setUserDelete(Usuario userDelete) {
+        this.userDelete = userDelete;
+    }
+
+    public long getUserDeletePK() {
+        return userDeletePK;
+    }
+
+    public void setUserDeletePK(long userDeletePK) {
+        this.userDeletePK = userDeletePK;
+    }
+    
+    
+
+    public Long getUserEditPK() {
+        return userEditPK;
+    }
+
+    public void setUserEditPK(Long userEditPK) {
+        this.userEditPK = userEditPK;
+    }
+    
+    
 
     public UsuariosBean() {
     }
+    
+    public void carregarEditar(Long codUsuario){
+        if(this.gerenciarUsuariosService == null){
+            this.gerenciarUsuariosService = new GerenciarUsuariosService();
+        }
+        this.userEdit = this.gerenciarUsuariosService.buscaUsuario(codUsuario);
+    }
+    
+    public void carregarExcluir(Long codUsuario){
+        if(this.gerenciarUsuariosService == null){
+            this.gerenciarUsuariosService = new GerenciarUsuariosService();
+        }
+        this.userDelete = this.gerenciarUsuariosService.buscaUsuario(codUsuario);
+    }
+    
+    
+
+    public UsuariosBean(Usuario user) {
+        this.user = user;
+    }
+
+    public Usuario getUserEdit() {
+        return userEdit;
+    }
+
+    public void setUserEdit(Usuario userEdit) {
+        this.userEdit = userEdit;
+    }
+    
+
+    public Usuario getUser() {
+        return user;
+    }
+
+    public void setUser(Usuario user) {
+        this.user = user;
+    }
+    public String salvaUsuario(){
+        System.out.println(this.user.getNomeUsuario()+" - "+this.user.getSnAtivo()+" - "+this.user.getTipoUsuario());
+        this.gerenciarUsuariosService.cadastrarUsuario(user);
+        return "gerenciarUsuario.xhtml?faces-redirect=true";
+    } 
+    public String editaUsuario(){
+        System.out.println(this.userEdit.getNomeUsuario()+" - "+this.userEdit.getSnAtivo()+" - "+this.userEdit.getTipoUsuario());
+        this.gerenciarUsuariosService.editarUsuario(userEdit);
+        return "gerenciarUsuario.xhtml?faces-redirect=true";
+    }
+    
     
     public UsuariosBean(List<Usuario> usuarios, GerenciarUsuariosService gerenciarUsuariosService) {
         this.usuarios = usuarios;
@@ -47,6 +131,9 @@ public class UsuariosBean implements Serializable{
             this.gerenciarUsuariosService = new GerenciarUsuariosService();
         }
         this.usuarios = this.gerenciarUsuariosService.usuarios();
+        if(this.user == null){
+            this.user = new Usuario();
+        }
     }
 
     public GerenciarUsuariosService getGerenciarUsuariosService() {

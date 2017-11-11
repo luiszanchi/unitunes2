@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -23,8 +24,7 @@ import javax.persistence.Table;
 @Table(name="USUARIO")
 public class Usuario {
     @Id
-    @SequenceGenerator(name="SEQ_USUARIO", sequenceName="SEQ_USUARIO",allocationSize=1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_USUARIO")
+    //@GeneratedValue
     @Column(name="COD_USUARIO", nullable = false)
     private Long codUsuario;
     
@@ -36,6 +36,20 @@ public class Usuario {
     
     @Column(name="SN_ATIVO", nullable = false, length = 1)
     private String snAtivo = "S";
+    
+    @Transient
+    private Boolean snAtivoParam;
+
+    public Boolean getSnAtivoParam() {
+        return this.snAtivo.equalsIgnoreCase("S");
+    }
+
+    public void setSnAtivoParam(Boolean snAtivoParam) {
+        this.snAtivoParam = snAtivoParam;
+        this.snAtivo = this.snAtivoParam?"S":"N";
+    }
+    
+    
 
     public Long getCodUsuario() {
         return codUsuario;
@@ -68,6 +82,7 @@ public class Usuario {
 
     public void setSnAtivo(String snAtivo) {
         this.snAtivo = snAtivo;
+        this.snAtivoParam = this.snAtivo.equalsIgnoreCase("S");
     }
     
     

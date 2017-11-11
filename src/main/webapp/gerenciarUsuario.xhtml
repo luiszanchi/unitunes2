@@ -8,7 +8,8 @@ and open the template in the editor.
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="template.xhtml">
         <ui:define name="conteudo">
             <p:dataTable var="usuario" value="#{usuariosGerenciar.usuarios}">
@@ -23,6 +24,16 @@ and open the template in the editor.
                 </p:column>
                 <p:column headerText="Ativo">
                     <h:outputText value="#{usuario.snAtivo}" />
+                </p:column>
+                <p:column headerText="Editar">
+                    <p:link outcome="editarUsuario" value="EDITAR">
+                            <f:param name="codUsuario" value="#{usuario.codUsuario}" />
+                    </p:link>
+                </p:column>
+                <p:column headerText="Excluir">
+                    <p:link outcome="excluirUsuario" value="EDITAR">
+                            <f:param name="codUsuario" value="#{usuario.codUsuario}" />
+                    </p:link>                    
                 </p:column>
             </p:dataTable>
         </ui:define>        
