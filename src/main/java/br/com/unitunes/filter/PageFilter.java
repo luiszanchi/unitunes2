@@ -47,12 +47,13 @@ import javax.servlet.http.HttpServletResponse;
          Boolean ajaxRequest = "partial/ajax".equals(request.getHeader("Faces-Request"));
          Boolean jsRequest = request.getRequestURI().toLowerCase().endsWith(".js");
          Boolean cssRequest = request.getRequestURI().toLowerCase().endsWith(".css");
+         Boolean pngRequest = request.getRequestURI().toLowerCase().endsWith(".png");
          
          //System.out.println(request.getContextPath());
          //System.out.println(request.getRequestURI());
          
          String newCurrentPage = ((HttpServletRequest) request).getServletPath();
-         if (loggedIn || loginRequest || resourceRequest || jsRequest || cssRequest) {
+         if (loggedIn || loginRequest || resourceRequest || jsRequest || cssRequest||pngRequest) {
             User user = null;
             
             if (!resourceRequest) { // Prevent browser from caching restricted resources. See also https://stackoverflow.com/q/4194207/157882

@@ -335,7 +335,7 @@ ul.multi-column-dropdown h6 {
 	font-size: 2.5em;
 	text-transform: uppercase;
 }
-.top-brands h2:after,.newproducts-w3agile h3:after,.login h2:after,.register h2:after,.faq-w3agile h3:after,.brands h3:after,.conteudo:after{
+.top-brands h2:after,.newproducts-w3agile h3:after,.login h2:after,.register h2:after,.faq-w3agile h3:after,.brands h3:after{
 	content: '';
     background: #3399cc;
     height: 2px;
