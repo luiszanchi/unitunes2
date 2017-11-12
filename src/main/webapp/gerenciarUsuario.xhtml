@@ -31,7 +31,10 @@ and open the template in the editor.
                     </p:link>
                 </p:column>
                 <p:column headerText="Excluir">
-                    
+
+                    <p:link outcome="excluirUsuario" value="EDITAR">
+                            <f:param name="codUsuario" value="#{usuario.codUsuario}" />
+                    </p:link>                    
                 </p:column>
             </p:dataTable>
         </ui:define>        

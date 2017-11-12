@@ -46,5 +46,18 @@ public class GerenciarUsuariosService {
         Boolean a = ud.atualizar(u);
         if(a)
             System.out.println("Usuario Editado Com Sucesso");
+        else 
+            System.out.println("Usuário não alterado");
+    }
+    public void excluirUsuario(Usuario u){
+                if(ud == null){
+            ud = new UsuarioDao();
+        }
+        Boolean a = ud.excluit(u);
+        if(a)
+            System.out.println("Usuario Excluido Com Sucesso");
+        else 
+            System.out.println("Usuário não excluido");
+>>>>>>> origin/master
     }
 }

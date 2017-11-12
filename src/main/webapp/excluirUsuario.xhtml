@@ -16,28 +16,28 @@ and open the template in the editor.
             <center>
                 <h:form>
                     <f:metadata>
-                        <f:viewParam name="codUsuario" value="#{usuariosGerenciar.userEditPK}" />
+                        <f:viewParam name="codUsuario" value="#{usuariosGerenciar.userDeletePK}" />
 
-                        <f:event type="preRenderView" listener="#{usuariosGerenciar.carregarEditar(usuariosGerenciar.userEditPK)}" />
+                        <f:event type="preRenderView" listener="#{usuariosGerenciar.carregarEditar(usuariosGerenciar.userDeletePK)}" />
                     </f:metadata>
                     <table>
                         <tbody>
                             <tr>
                                 <td><h:outputText value="Codigo: "/></td>
-                                <td><h:outputText value="#{usuariosGerenciar.userEdit.codUsuario}"/></td>
+                                <td><h:outputText value="#{usuariosGerenciar.userDelete.codUsuario}"/></td>
                             </tr>
                             <tr>
                                 <td><h:outputText value="Nome: "/></td>
-                                <td><p:inputText  value="#{usuariosGerenciar.userEdit.nomeUsuario}"/></td>
+                                <td><p:inputText  value="#{usuariosGerenciar.userDelete.nomeUsuario}"/></td>
                             </tr>
                             <tr style="height: 50px;">
                                 <td><h:outputText value="Ativo: "/></td>
-                                <td><p:inputSwitch value="#{usuariosGerenciar.userEdit.snAtivoParam}"/></td>
+                                <td><p:inputSwitch value="#{usuariosGerenciar.userDelete.snAtivoParam}"/></td>
                             </tr>
                             <tr>
                                 <td><h:outputText value="Perfil: " /></td>
                                 <td>
-                                    <p:selectOneMenu value="#{usuariosGerenciar.userEdit.tipoUsuario}" style="width:125px">
+                                    <p:selectOneMenu value="#{usuariosGerenciar.userDelete.tipoUsuario}" style="width:125px">
                                         <f:selectItem itemLabel="Selecione" itemValue=""/>
                                         <f:selectItem itemLabel="Administrador" itemValue="D"/>
                                         <f:selectItem itemLabel="Autor" itemValue="U"/>
@@ -47,7 +47,7 @@ and open the template in the editor.
                             </tr>
                             <tr>
                                 <td></td>
-                                <td><p:commandButton value="Editar" action="#{usuariosGerenciar.editaUsuario()}" /></td>
+                                <td><p:commandButton value="Editar" action="#{usuariosGerenciar.excluirUsuario()}" /></td>
                             </tr>
                         </tbody>
                     </table>
