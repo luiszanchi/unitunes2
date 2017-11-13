@@ -54,18 +54,17 @@ public class Midia {
     @Column(name = "DATA_CRIACAO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataCriacao;
+       
+    @Column(name = "CATEGORIA", length = 255)
+    private String categoria;
     
-    @OneToOne(targetEntity = CategoriaMidia.class)
-    @JoinColumn(name = "COD_CATEGORIA", nullable = false)
-    private CategoriaMidia codCategoria;
-
     @Column(name = "DURACAO", nullable = false)
     private Double duracao;
     
     public Midia() {
     }
 
-    public Midia(Long codMidia, String tipoMidia, String nomeMidia, String descricao, byte[] imagem, Double valorMidia, byte[] conteudoMidia, Date dataCriacao, CategoriaMidia codCategoria, Double duracao) {
+    public Midia(Long codMidia, String tipoMidia, String nomeMidia, String descricao, byte[] imagem, Double valorMidia, byte[] conteudoMidia, Date dataCriacao, String categoria, Double duracao) {
         this.codMidia = codMidia;
         this.tipoMidia = tipoMidia;
         this.nomeMidia = nomeMidia;
@@ -74,7 +73,7 @@ public class Midia {
         this.valorMidia = valorMidia;
         this.conteudoMidia = conteudoMidia;
         this.dataCriacao = dataCriacao;
-        this.codCategoria = codCategoria;
+        this.categoria = categoria;
         this.duracao = duracao;
     }
 
@@ -86,6 +85,13 @@ public class Midia {
         this.duracao = duracao;
     }
 
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+            this.categoria = categoria;
+    }
     
 
     public Long getCodMidia() {
@@ -158,14 +164,6 @@ public class Midia {
 
     public void setDataCriacao(Date dataCriacao) {
         this.dataCriacao = dataCriacao;
-    }
-
-    public CategoriaMidia getCodCategoria() {
-        return codCategoria;
-    }
-
-    public void setCodCategoria(CategoriaMidia codCategoria) {
-        this.codCategoria = codCategoria;
     }
     
 }
