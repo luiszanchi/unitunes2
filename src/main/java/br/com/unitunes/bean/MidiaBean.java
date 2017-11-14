@@ -6,18 +6,17 @@
 package br.com.unitunes.bean;
 
 import br.com.unitunes.entity.Midia;
-import br.com.unitunes.entity.MidiaAutor;
-import br.com.unitunes.entity.Usuario;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import br.com.unitunes.service.GerenciarMidiaService;
 import br.com.unitunes.service.GerenciarUsuariosService;
-import java.util.ArrayList;
+import br.com.unitunes.session.SessionContext;
+import br.com.unitunes.session.User;
+import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
@@ -32,7 +31,6 @@ public class MidiaBean  implements Serializable{
     private List<Midia> midias;
     private GerenciarMidiaService gerenciarMidiaService;
     private Midia midia = new Midia();
-    private String usuario;
     private boolean isLivro;
     private boolean isPodcast;
     private boolean isDesabilitado = true;
@@ -40,29 +38,12 @@ public class MidiaBean  implements Serializable{
     private boolean isVideo;
     UploadedFile imagem;
     UploadedFile conteudo;
-    MidiaAutor midAutor = new MidiaAutor();
-    List<Usuario> listaUsuarios = new ArrayList<>();
-
-    public MidiaAutor getMidAutor() {
-        return midAutor;
-    }
-
-    public void setMidAutor(MidiaAutor midAutor) {
-        this.midAutor = midAutor;
-
-    }
+  
     public void setImagem(UploadedFile imagem) {
         this.imagem = imagem;
     }
     public void setArquivo(UploadedFile arquivo) {
         this.conteudo = arquivo;
-    }
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
     }
     public UploadedFile getArquivo() {
         return conteudo;
@@ -91,6 +72,7 @@ public class MidiaBean  implements Serializable{
     public Midia getMidia() {
         return midia;
     }
+    
 
     public void setMidia(Midia midia) {
         this.midia = midia;
@@ -109,37 +91,7 @@ public class MidiaBean  implements Serializable{
 
     public void setIsPodcast(boolean isPodcast) {
         this.isPodcast = isPodcast;
-    }
-    
-    public List<SelectItem> buscaUsuarios(){
-        
-        List<SelectItem> listaItem = new ArrayList<>();
-        /*
-        Usuario usua = new Usuario();
-        usua.setCodUsuario(Long.MIN_VALUE);
-        usua.setNomeUsuario("usuario1");
-        listaUsuarios.add(usua);
-        
-        Usuario usua1 = new Usuario();
-        usua1.setCodUsuario(Long.MIN_VALUE);
-        usua1.setNomeUsuario("usuario2");
-        listaUsuarios.add(usua1);
-        
-         Usuario usua2 = new Usuario();
-        usua2.setCodUsuario(Long.MIN_VALUE);
-        usua2.setNomeUsuario("usuario3");
-        listaUsuarios.add(usua2);
-        */
-        
-        //TODO descomentar quando tiver arquivos no banco
-        listaUsuarios = new GerenciarUsuariosService().usuarios();
-        
-        for (Usuario usu : listaUsuarios) {
-            listaItem.add(new SelectItem(usu, usu.getNomeUsuario()));
-        }   
-        return listaItem;
-    }
-    
+    } 
     
     public String salvaMidia(){
         if (midia.getCategoria() == null){
@@ -155,12 +107,16 @@ public class MidiaBean  implements Serializable{
             return null;
         }
         
+        midia.setDataCriacao(new Date(System.currentTimeMillis()));
+                
         byte[] ArraybytesImagem = imagem.getContents();
         midia.setImagem(ArraybytesImagem);
         
         byte[] ArraybytesConteudo = conteudo.getContents();
         midia.setConteudoMidia(ArraybytesConteudo);
         
+        User user = (User) SessionContext.getInstance().getAttribute("user");
+        midia.setCodAutor(new GerenciarUsuariosService().buscaUsuario(Long.parseLong(user.getCodUsuario())));
         
         if (this.gerenciarMidiaService == null){
             this.gerenciarMidiaService = new GerenciarMidiaService();
@@ -168,10 +124,6 @@ public class MidiaBean  implements Serializable{
         this.gerenciarMidiaService.cadastrarMidia(midia);
         return "gerenciarMidia.xhtml?faces-redirect=true";
     } 
-    
-    public void adicionaAutor(){
-        
-    }
        
     public void CarregaImagem(FileUploadEvent event) {
         

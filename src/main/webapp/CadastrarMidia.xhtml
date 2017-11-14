@@ -14,10 +14,10 @@ and open the template in the editor.
         <ui:define name="conteudo">
             <link href="css/primefaces/inputswitch.css" rel="stylesheet" type="text/css" media="all" />
             <center>
-                <h:form>
+                <h:form id="form">
                     <table>
                         <tbody>
-                                 <tr>
+                            <tr>
                                 <td><h:outputText value="Perfil :  " style="margin-right:34px;"  rendered="#{GerenciarMidia.isDesabilitado}" /></td>
                                 <td>
                                     <p:selectOneMenu value="#{GerenciarMidia.midia.tipoMidia}" style="width:180px;" rendered="#{GerenciarMidia.isDesabilitado}">
@@ -37,14 +37,14 @@ and open the template in the editor.
                             <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">
                                 <tr>
                                     <td><h:outputText value="Nome :  " style="font-weight:bold" /></td>
-                                    <td><p:inputText  value="#{GerenciarMidia.midia.nomeMidia}" style="margin-top:20px;" required="true" requiredMessage="Campo Obrigatorio"/></td>
+                                    <td><p:inputText  value="#{GerenciarMidia.midia.nomeMidia}" style="margin-top:20px;margin-bottom:20px;" required="true" requiredMessage="Campo Obrigatorio"/></td>
                                 </tr>
                             </ui:fragment>
                             
                             <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">
                                 <tr>
                                     <td><h:outputText value="Preço :  " style="font-weight:bold"/></td>
-                                    <td><p:inputText  value="#{GerenciarMidia.midia.valorMidia}" style="margin-top:20px;" required="true" requiredMessage="Campo Obrigatorio"/></td>
+                                    <td><p:inputNumber  value="#{GerenciarMidia.midia.valorMidia}" required="true" requiredMessage="Campo Obrigatorio"/></td>
                                 </tr>
                             </ui:fragment>
                             
@@ -54,27 +54,12 @@ and open the template in the editor.
                                     <td><p:inputText  value="#{GerenciarMidia.midia.descricao}" required="true"  requiredMessage="Campo Obrigatorio" style="margin-top:20px;" /></td>
                                 </tr>
                             </ui:fragment>
-                     
-                            
-                            <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">
-                                <form>
-                                <tr>
-                                    <td><h:outputText value="Autor(es) :  " style="font-weight:bold"/></td>
-                                    <td>
-                                        <p:selectOneMenu value="#{GerenciarMidia.midAutor.codUsuario}" style="margin-top:20px;margin-bottom: 20px;" >
-                                            <f:selectItems value="#{GerenciarMidia.buscaUsuarios()}" var="usuario" itemLabel="#{usuario.label}" itemValue="#{usuario}"  />
-                                        </p:selectOneMenu>
-                                    </td>
-                                </tr>
-                                </form>
-                            </ui:fragment>
-                            
                             <ui:fragment rendered="#{GerenciarMidia.isMusica}" >
                              <tr>
                                 <td><h:outputText value="Categoria :  " style="font-weight:bold"  /></td>
                                 <td>
-                                    <p:selectOneMenu value="#{GerenciarMidia.midia.categoria}" style="margin-bottom: 20px;" >
-                                        <p:ajax update="@this" />    
+                                    <p:selectOneMenu value="#{GerenciarMidia.midia.categoria}" style="margin-top:20px;margin-bottom: 20px;" >
+                                        <p:ajax update="@this" />
                                         <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true"/>
                                         <f:selectItem itemLabel="Gospel" itemValue="G"/>
                                         <f:selectItem itemLabel="Jazz" itemValue="J"/>
@@ -174,13 +159,6 @@ and open the template in the editor.
                                     </p:selectOneMenu>
                                 </td>
                             </tr>
-                            </ui:fragment>
-
-                            <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">
-                                <tr>
-                                   <td><h:outputText value="Dt Criação :  " style="font-weight:bold"/></td>
-                                    <td><p:calendar id="button" value="#{GerenciarMidia.midia.dataCriacao}" required="true" requiredMessage="Campo Obrigatorio" showOn="button"  /></td> 
-                                </tr>
                             </ui:fragment>
                             
                             <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">

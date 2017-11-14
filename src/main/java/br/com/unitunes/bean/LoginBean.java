@@ -46,16 +46,10 @@ public class LoginBean implements Serializable{
         this.senha = senha;
     }
 
-    
-    
-
-    
+  
     public User getUser() {
         return (User) SessionContext.getInstance().getAttribute("user");
     }
-
-   
-
     public UserLogin getUserLogin() {
         return userLogin;
     }
