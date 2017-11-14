@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="template.xhtml">
+        <ui:define name="conteudo">
+            <link href="css/primefaces/inputswitch.css" rel="stylesheet" type="text/css" media="all" />
+            <center>
+                <h:form>
+                    <table>
+                        <tbody>
+                                 <tr>
+                                <td><h:outputText value="Perfil :  " style="margin-right:34px;"  rendered="#{GerenciarMidia.isDesabilitado}" /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{GerenciarMidia.midia.tipoMidia}" style="width:180px;" rendered="#{GerenciarMidia.isDesabilitado}">
+                                        <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItem itemLabel="Livro" itemValue="L"/>
+                                        <f:selectItem itemLabel="Podcast" itemValue="P"/>
+                                        <f:selectItem itemLabel="Video" itemValue="V"/>
+                                        <f:selectItem itemLabel="Musica" itemValue="M"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                            <td></td>
+                            <td><p:commandButton value="Proximo" action="#{GerenciarMidia.proximaEtapa()}"  oncomplete="submit()" style="margin-bottom:12px;margin-top:34px;" rendered="#{GerenciarMidia.isDesabilitado}"/></td>
+                            </tr>
+                            
+                            <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">
+                                <tr>
+                                    <td><h:outputText value="Nome :  " style="font-weight:bold" /></td>
+                                    <td><p:inputText  value="#{GerenciarMidia.midia.nomeMidia}" style="margin-top:20px;" required="true" requiredMessage="Campo Obrigatorio"/></td>
+                                </tr>
+                            </ui:fragment>
+                            
+                            <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">
+                                <tr>
+                                    <td><h:outputText value="Preço :  " style="font-weight:bold"/></td>
+                                    <td><p:inputText  value="#{GerenciarMidia.midia.valorMidia}" style="margin-top:20px;" required="true" requiredMessage="Campo Obrigatorio"/></td>
+                                </tr>
+                            </ui:fragment>
+                            
+                            <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">
+                                <tr>
+                                    <td><h:outputText value="Descrição :  " style="font-weight:bold"/></td>
+                                    <td><p:inputText  value="#{GerenciarMidia.midia.descricao}" required="true"  requiredMessage="Campo Obrigatorio" style="margin-top:20px;" /></td>
+                                </tr>
+                            </ui:fragment>
+                     
+                            
+                            <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">
+                                <form>
+                                <tr>
+                                    <td><h:outputText value="Autor(es) :  " style="font-weight:bold"/></td>
+                                    <td>
+                                        <p:selectOneMenu value="#{GerenciarMidia.midAutor.codUsuario}" style="margin-top:20px;margin-bottom: 20px;" >
+                                            <f:selectItems value="#{GerenciarMidia.buscaUsuarios()}" var="usuario" itemLabel="#{usuario.label}" itemValue="#{usuario}"  />
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+                                </form>
+                            </ui:fragment>
+                            
+                            <ui:fragment rendered="#{GerenciarMidia.isMusica}" >
+                             <tr>
+                                <td><h:outputText value="Categoria :  " style="font-weight:bold"  /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{GerenciarMidia.midia.categoria}" style="margin-bottom: 20px;" >
+                                        <p:ajax update="@this" />    
+                                        <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItem itemLabel="Gospel" itemValue="G"/>
+                                        <f:selectItem itemLabel="Jazz" itemValue="J"/>
+                                        <f:selectItem itemLabel="Samba" itemValue="Sa"/>
+                                        <f:selectItem itemLabel="Pagode" itemValue="P"/>
+                                        <f:selectItem itemLabel="Rap" itemValue="Ra"/>
+                                        <f:selectItem itemLabel="Reggae" itemValue="Re"/>
+                                        <f:selectItem itemLabel="Rock and Roll" itemValue="Ro"/>
+                                        <f:selectItem itemLabel="Sertanejo" itemValue="Se"/>
+                                        <f:selectItem itemLabel="Foró" itemValue="F"/>
+                                        <f:selectItem itemLabel="Outros" itemValue="O"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                             </ui:fragment>
+                            <ui:fragment rendered="#{GerenciarMidia.isVideo}" >
+                             <tr>
+                                <td><h:outputText value="Categoria :  " style="font-weight:bold"  /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{GerenciarMidia.midia.categoria}" style="margin-top:20px;margin-bottom: 20px;"  validatorMessage="Campo Obrigatorio"  >
+                                        <p:ajax update="@this"/>
+                                        <f:selectItem itemLabel="Selecione" itemValue="select" noSelectionOption="true"/>
+                                        <f:selectItem itemLabel="Automóveis" itemValue="aut"/>
+                                        <f:selectItem itemLabel="Animais" itemValue="ani"/>
+                                        <f:selectItem itemLabel="Comédia" itemValue="com"/>
+                                        <f:selectItem itemLabel="Ciência e tecnologia" itemValue="cie"/>
+                                        <f:selectItem itemLabel="Entretenimento" itemValue="ent"/>
+                                        <f:selectItem itemLabel="Esportes" itemValue="esp"/>
+                                        <f:selectItem itemLabel="Educação" itemValue="edu"/>
+                                        <f:selectItem itemLabel="Filmes e Desenhos" itemValue="fil"/>
+                                        <f:selectItem itemLabel="Guias e Estilo" itemValue="gui"/>
+                                        <f:selectItem itemLabel="Jogos" itemValue="jog"/>
+                                        <f:selectItem itemLabel="Música" itemValue="mus"/>
+                                        <f:selectItem itemLabel="Noticias e Politica" itemValue="not"/>
+                                        <f:selectItem itemLabel="Pessoas e Blogs" itemValue="pes"/>
+                                        <f:selectItem itemLabel="Sem fins lucrativos/ativismo" itemValue="sem"/>
+                                        <f:selectItem itemLabel="Viagens e Eventos" itemValue="via"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{GerenciarMidia.isPodcast}" >
+                             <tr>
+                                <td><h:outputText value="Categoria :  " style="font-weight:bold"  /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{GerenciarMidia.midia.categoria}" style="margin-top:20px;margin-bottom: 20px;" validatorMessage="Campo Obrigatorio"  >
+                                        <p:ajax update="@this"/>
+                                        <f:selectItem itemLabel="Selecione" itemValue="select" noSelectionOption="true"/>
+                                        <f:selectItem itemLabel="Ciências" itemValue="cie"/>
+                                        <f:selectItem itemLabel="Cinema" itemValue="cin"/>
+                                        <f:selectItem itemLabel="Culturais" itemValue="cul"/>
+                                        <f:selectItem itemLabel="Esportivos" itemValue="esp"/>
+                                        <f:selectItem itemLabel="Educacionais" itemValue="edu"/>
+                                        <f:selectItem itemLabel="Games" itemValue="gam"/>
+                                        <f:selectItem itemLabel="Humorísticos" itemValue="hum"/>
+                                        <f:selectItem itemLabel="Musicais" itemValue="mus"/>
+                                        <f:selectItem itemLabel="Notícias" itemValue="not"/>
+                                        <f:selectItem itemLabel="Profissionais" itemValue="pro"/>
+                                        <f:selectItem itemLabel="Política" itemValue="pol"/>
+                                        <f:selectItem itemLabel="Religiosos" itemValue="rel"/>
+                                        <f:selectItem itemLabel="TV" itemValue="tv"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{GerenciarMidia.isLivro}" >
+                             <tr>
+                                <td><h:outputText value="Categoria :  " style="font-weight:bold"  /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{GerenciarMidia.midia.categoria}" style="margin-top:20px;margin-bottom: 20px;" validatorMessage="Campo Obrigatorio" >
+                                        <p:ajax update="@this"/>
+                                        <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItem itemLabel="Antologias‎" itemValue="ant"/>
+                                        <f:selectItem itemLabel="Autoajuda‎" itemValue="aut"/>
+                                        <f:selectItem itemLabel="Aventura‎" itemValue="ave"/>
+                                        <f:selectItem itemLabel="Agropecuária" itemValue="agr"/>
+                                        <f:selectItem itemLabel="Biográficos‎" itemValue="bio"/>
+                                        <f:selectItem itemLabel="Científicos‎" itemValue="cie"/>
+                                        <f:selectItem itemLabel="Crônicas‎" itemValue="cro"/>
+                                        <f:selectItem itemLabel="Didáticos‎" itemValue="did"/>
+                                        <f:selectItem itemLabel="Épicos‎" itemValue="epi"/>
+                                        <f:selectItem itemLabel="Fantasia‎" itemValue="fan"/>
+                                        <f:selectItem itemLabel="Ficção científica" itemValue="fic"/>
+                                        <f:selectItem itemLabel="Ficção histórica" itemValue="fih"/>
+                                        <f:selectItem itemLabel="Guias de viagem‎" itemValue="gui"/>
+                                        <f:selectItem itemLabel="Horror‎" itemValue="hor"/>
+                                        <f:selectItem itemLabel="Infantojuvenis‎" itemValue="infj"/>
+                                        <f:selectItem itemLabel="Infantis‎" itemValue="inft"/>
+                                        <f:selectItem itemLabel="Livros-jogos‎" itemValue="liv"/>
+                                        <f:selectItem itemLabel="Manuais‎" itemValue="man"/>
+                                        <f:selectItem itemLabel="Memórias‎" itemValue="mem"/>
+                                        <f:selectItem itemLabel="Natal‎" itemValue="nat"/>
+                                        <f:selectItem itemLabel="Poesia‎" itemValue="poe"/>
+                                        <f:selectItem itemLabel="Política‎" itemValue="pol"/>
+                                        <f:selectItem itemLabel="Romances" itemValue="rom"/>
+                                        <f:selectItem itemLabel="Outros" itemValue="out"/>
+                                    </p:selectOneMenu>
+                                </td>
+                            </tr>
+                            </ui:fragment>
+
+                            <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">
+                                <tr>
+                                   <td><h:outputText value="Dt Criação :  " style="font-weight:bold"/></td>
+                                    <td><p:calendar id="button" value="#{GerenciarMidia.midia.dataCriacao}" required="true" requiredMessage="Campo Obrigatorio" showOn="button"  /></td> 
+                                </tr>
+                            </ui:fragment>
+                            
+                            <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">
+                                <h:form >
+                                    <tr>
+                                        <td><h:outputText value="Imagem :  " style="font-weight:bold"/></td>
+                                            <td>
+                                                <p:fileUpload fileUploadListener="#{GerenciarMidia.CarregaImagem}" id="img" label="#{GerenciarMidia.labelImagem()}"  update="img, message" auto="true" mode="advanced" dragDropSupport="true" style="margin-top:20px;"/>
+                                                 <p:growl id="message" showDetail="true" />
+                                            </td>
+                                    </tr>
+                                </h:form>
+                            </ui:fragment>
+                            
+                            <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">
+                                <h:form  >
+                                    <tr>
+                                    <td><h:outputText value="Conteúdo :  " style="font-weight:bold"/></td>
+                                        <td>
+                                            <p:fileUpload fileUploadListener="#{GerenciarMidia.CarregaConteudo}" id="cont" label="#{GerenciarMidia.labelConteudo()}" update="cont, messages" auto="true"  mode="advanced" dragDropSupport="true" style="margin-top:20px;"/>
+                                            <p:growl id="messages" showDetail="true" />
+                                        </td>
+                                    </tr>
+                                </h:form>
+                            </ui:fragment>  
+                            
+                            <ui:fragment rendered="#{GerenciarMidia.isLivro or GerenciarMidia.isPodcast or GerenciarMidia.isMusica or GerenciarMidia.isVideo}">
+                                <tr>
+                                    <td><p:commandButton value="Salvar" ajax="false" actionListener="#{GerenciarMidia.salvaMidia()}"/></td>
+                                </tr>
+                            </ui:fragment>  
+                            
+                        </tbody>
+                    </table>
+                </h:form>
+            </center>
+        </ui:define>
+    </ui:composition>
+</html>

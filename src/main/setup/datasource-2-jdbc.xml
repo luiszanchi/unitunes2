@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jdbc-data-source xmlns="http://xmlns.oracle.com/weblogic/jdbc-data-source">
+  <name>unitunes1</name>
+  <jdbc-driver-params>
+    <url>jdbc:postgresql://localhost:5432/postgres</url>
+    <driver-name>org.postgresql.Driver</driver-name>
+    <properties>
+      <property>
+        <name>user</name>
+        <value>postgres</value>
+      </property>
+      <property>
+        <name>password</name>
+        <value>123456</value>
+      </property>
+    </properties>
+  </jdbc-driver-params>
+  <jdbc-data-source-params>
+    <jndi-name>unitunes1</jndi-name>
+  </jdbc-data-source-params>
+</jdbc-data-source>

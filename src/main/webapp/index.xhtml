@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+   
+     <ui:composition template="template.xhtml">
+
+         <ui:define name="js">
+             <script src="js/jquery-1.11.1.min.js"></script>
+        
+         </ui:define>
+        <ui:define name="conteudo">
+      
+        
+        <!-- main-slider -->
+        <ul id="demo1">
+            <li>
+                <img src="images/11.jpg" alt="" width="100%" height="100%" />
+                <!--Slider Description example-->
+                <div class="slide-desc">
+                </div>
+            </li>
+            <li>
+                <img src="images/22.jpg" alt="" width="100%" height="100%" />
+                <div class="slide-desc">
+                    <h3>Ultimas novidades</h3>
+                </div>
+            </li>
+
+            <li>
+                <img src="images/44.jpg" alt="" width="100%" height="100%" />
+                <div class="slide-desc">
+                    <h3>Compartilhe suas mídias</h3>
+                </div>
+            </li>
+        </ul>
+        
+        </ui:define>
+
+    </ui:composition>
+      
+      <script>
+            window.onload = function () {
+                document.getElementById("conteudo-pagina").load("player.html");
+            }
+        </script>  
+        
+</html>
+
