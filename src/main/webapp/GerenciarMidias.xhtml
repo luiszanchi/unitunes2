@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"	xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="template.xhtml">
+        <ui:define name="conteudo">
+            <form id="form">
+            <p:growl id="msgs" showDetail="true" />
+            <p:dataTable  id="output" var="midia" value="#{GerenciarMidia.midias}">
+                <p:column headerText="Cod">
+                    <h:outputText value="#{midia.codMidia}" />
+                </p:column>
+                <p:column headerText="Nome">
+                    <h:outputText value="#{midia.nomeMidia}" />
+                </p:column>
+                <p:column headerText="Tipo">
+                    <h:outputText value="#{midia.categoria}" />
+                </p:column>
+                <p:column headerText="Valor">
+                    <h:outputText value="#{midia.valorMidia}" />
+                </p:column>
+                <p:column headerText="Midia">
+                    <h:form>
+                        <p:commandButton update="output" value="Play" type="button" action="#{GerenciarMidia.carregarMidia}" onclick="PF('dlg1').show();" icon="ui-icon-search">
+                            <f:setPropertyActionListener value="#{midia}" target="#{GerenciarMidia.carregarMidia}" />
+                            <p:ajax update="@this" />
+                        </p:commandButton>  
+                        
+                        <p:column headerText="Action">
+					<p:commandButton value="play" process="output" update="output" action="#{GerenciarMidia.carregarMidia}">
+						<f:setPropertyActionListener value="#{midia}" target="#{GerenciarMidia.carregarMidia}" />
+					</p:commandButton>
+				</p:column>
+                    </h:form>
+                </p:column>
+            </p:dataTable>
+            
+            <p:dialog header="Player" widgetVar="dlg1" minHeight="40">
+                <p:outputPanel id="player" style="text-align:center;">
+                    <div>
+                        <h:outputText value="#{GerenciarMidia.midia.nomeMidia}" />
+                    </div>
+                    <audio controls="controls" controlsList="nodownload">
+                            <source src="Avivamento.mp3" type="audio/mpeg" />
+                        </audio>
+                </p:outputPanel>
+            </p:dialog>
+            
+            
+          </form>
+        </ui:define>        
+    </ui:composition>
+</html>

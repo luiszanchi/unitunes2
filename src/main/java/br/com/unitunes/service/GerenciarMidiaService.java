@@ -2,6 +2,7 @@
 package br.com.unitunes.service;
 
 import br.com.unitunes.dao.MidiaDao;
+import br.com.unitunes.dao.UsuarioDao;
 import br.com.unitunes.entity.Midia;
 import java.util.List;
 import javax.faces.bean.ApplicationScoped;
@@ -50,5 +51,12 @@ public class GerenciarMidiaService {
             System.out.println("Midia Excluida Com Sucesso");
         else 
             System.out.println("Midia não excluida");
+    }
+    
+      public List<Midia> buscarMidiasUsuario(String usuario){
+         if(ud == null){
+            ud = new MidiaDao();
+        }
+        return ud.getQueryList("from Midia mid where mid.codAutor.codUsuario =" + usuario);
     }
 }

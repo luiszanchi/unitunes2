@@ -6,6 +6,7 @@
 package br.com.unitunes.bean;
 
 import br.com.unitunes.entity.Midia;
+import br.com.unitunes.entity.Usuario;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -15,7 +16,9 @@ import br.com.unitunes.session.SessionContext;
 import br.com.unitunes.session.User;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -25,12 +28,14 @@ import org.primefaces.model.UploadedFile;
  *
  * @author LuisFernandoTorriani
  */
-@ManagedBean(name = "GerenciarMidia")
-@ViewScoped
+
+@ManagedBean(name = "GerenciarMidia", eager = true)
+@SessionScoped
 public class MidiaBean  implements Serializable{
     private List<Midia> midias;
     private GerenciarMidiaService gerenciarMidiaService;
     private Midia midia = new Midia();
+    private Midia Midiaplayer = new Midia();
     private boolean isLivro;
     private boolean isPodcast;
     private boolean isDesabilitado = true;
@@ -38,6 +43,7 @@ public class MidiaBean  implements Serializable{
     private boolean isVideo;
     UploadedFile imagem;
     UploadedFile conteudo;
+    User user;
   
     public void setImagem(UploadedFile imagem) {
         this.imagem = imagem;
@@ -52,13 +58,36 @@ public class MidiaBean  implements Serializable{
     public UploadedFile getImagem() {
         return imagem;
     }
+      public Midia getMidiaplayer() {
+        return Midiaplayer;
+    }
+
+    public void setMidiaplayer(Midia Midiaplayer) {
+        this.Midiaplayer = Midiaplayer;
+    }
+     public void carregarMidia(Midia midia){
+         Midiaplayer = midia;
+         System.out.print("dsdasd");
+     }
+    
+    @PostConstruct
+    public void init(){
+        if (this.gerenciarMidiaService == null){
+            this.gerenciarMidiaService = new GerenciarMidiaService();
+        }
+        if(user == null){        
+             user = (User) SessionContext.getInstance().getAttribute("user");
+        }
+        midias = this.gerenciarMidiaService.buscarMidiasUsuario(user.getCodUsuario());
+       
+    }
 
     public List<Midia> getMidias() {
         return midias;
     }
 
-    public void setMidias(List<Midia> Midias) {
-        this.midias = Midias;
+    public void setMidias(List<Midia> midias) {
+        this.midias = midias;
     }
 
     public GerenciarMidiaService getGerenciarMidiaService() {
@@ -115,7 +144,9 @@ public class MidiaBean  implements Serializable{
         byte[] ArraybytesConteudo = conteudo.getContents();
         midia.setConteudoMidia(ArraybytesConteudo);
         
-        User user = (User) SessionContext.getInstance().getAttribute("user");
+        if(user == null){        
+             user = (User) SessionContext.getInstance().getAttribute("user");
+        }
         midia.setCodAutor(new GerenciarUsuariosService().buscaUsuario(Long.parseLong(user.getCodUsuario())));
         
         if (this.gerenciarMidiaService == null){
