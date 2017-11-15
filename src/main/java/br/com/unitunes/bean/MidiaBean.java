@@ -65,9 +65,23 @@ public class MidiaBean  implements Serializable{
     public void setMidiaplayer(Midia Midiaplayer) {
         this.Midiaplayer = Midiaplayer;
     }
-     public void carregarMidia(Midia midia){
-         Midiaplayer = midia;
-         System.out.print("dsdasd");
+     
+
+    public void carregarMidia(Midia midiaAtual){
+         this.midia.setNomeMidia(midiaAtual.getNomeMidia());
+         this.midia.setConteudoMidia(midiaAtual.getConteudoMidia());
+         if(midiaAtual.getTipoMidia().equalsIgnoreCase("V")){
+                isLivro = false;
+               isPodcast = false;
+               isMusica = false;
+               isVideo = true;
+         }else if (midiaAtual.getTipoMidia().equalsIgnoreCase("M")){
+               isLivro = false;
+               isPodcast = false;
+               isMusica = true;
+               isVideo = false;
+         }
+
      }
     
     @PostConstruct
