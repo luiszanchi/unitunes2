@@ -44,6 +44,7 @@ jQuery(document).ready(function ($) {
         </script>
     </h:head>
     <h:body>
+        <form>
         
         <ui:fragment rendered="true">
             <audio controls="controls" controlsList="nodownload">
@@ -56,9 +57,7 @@ jQuery(document).ready(function ($) {
                 <source src="teste.mp4" type="video/mp4"/>
             </video>  
        </ui:fragment>
-        
-        
-        
+
         <!-- header -->
         <ui:insert name="header">
             <ui:include src="includes/header.xhtml"/>
@@ -79,7 +78,7 @@ jQuery(document).ready(function ($) {
             <ui:insert name="footer">
                 <ui:include src="includes/footer.xhtml"/>
             </ui:insert>`
-
+        </form>
     </h:body>
     
     

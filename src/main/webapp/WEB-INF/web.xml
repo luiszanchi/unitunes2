@@ -9,4 +9,10 @@
             30
         </session-timeout>
     </session-config>
+    
+    <context-param>
+    <param-name>javax.faces.PROJECT_STAGE</param-name>
+    <param-value>Production</param-value>
+  </context-param>
+    
 </web-app>

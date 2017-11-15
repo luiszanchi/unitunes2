@@ -9,6 +9,7 @@ import br.com.unitunes.session.SessionContext;
 import br.com.unitunes.session.UserLogin;
 import br.com.unitunes.session.User;
 import java.io.Serializable;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -45,16 +46,10 @@ public class LoginBean implements Serializable{
         this.senha = senha;
     }
 
-    
-    
-
-    
+  
     public User getUser() {
         return (User) SessionContext.getInstance().getAttribute("user");
     }
-
-   
-
     public UserLogin getUserLogin() {
         return userLogin;
     }
@@ -104,9 +99,8 @@ public class LoginBean implements Serializable{
             User user = userLogin.isUsuarioReadyToLogin(login, senha);
 
             if (user == null) {
-                //addErrorMessage("Login ou Senha errado, tente novamente !");
-                FacesContext.getCurrentInstance().validationFailed();
-                return "erro";
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Login ou Senha invalidos"));
+                return null;
             }
 
             //User usuario = (User) getUserBO().findByNamedQuery(Usuario.FIND_BY_ID,

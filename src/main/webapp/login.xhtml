@@ -43,7 +43,7 @@ jQuery(document).ready(function ($) {
             <div class="container">
                 <ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
                     <li><a href="index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
-                    <li class="active">Login Page</li>
+                    <li class="active">Pagina de Login</li>
                 </ol>
             </div>
         </div>
@@ -51,7 +51,7 @@ jQuery(document).ready(function ($) {
         <!-- login -->
         <div class="login">
             <div class="container">
-                <h2>Login Form</h2>
+                <h2>Logar</h2>
 
                 <div class="login-form-grids animated wow slideInUp" data-wow-delay=".5s">
                     <h:form id="loginForm">
@@ -60,15 +60,18 @@ jQuery(document).ready(function ($) {
                         <!--<input type="password" placeholder="Password" required="true" />-->
                         <h:inputText value="#{usuarioLogadoMB.senha}" />
                         <div class="forgot">
-                            <a href="#">Forgot Password?</a>
+                            <a href="#">Esqueceu a Senha?</a>
                         </div>
-                        <h:commandButton value="Login" action="#{usuarioLogadoMB.doLogin}"/>
-                                                
-                        <!--<input type="submit" value="Login"/> -->
+                        <h:commandButton value="Logar" action="#{usuarioLogadoMB.doLogin}" />   
+                            <tr>
+                                <td>
+                                    <p:growl id="messages" showDetail="true" />
+                                </td>
+                            </tr>
                     </h:form>
                 </div>
-                <h4>For New People</h4>
-                <p><a href="registered.html">Register Here</a> (Or) go back to <a href="index.html">Home<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></p>
+                <h4>É novo aqui?</h4>
+                <p><a href="CadastrarUsuario.xhtml">Cadastrar</a></p>
             </div>
         </div>
         <!-- //login -->

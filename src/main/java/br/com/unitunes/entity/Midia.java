@@ -6,13 +6,12 @@
 package br.com.unitunes.entity;
 
 import java.util.Date;
-import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -23,49 +22,47 @@ import javax.persistence.TemporalType;
  * @author LuisFernandoTorriani
  */
 @Entity
-@Table(name="MIDIA")
+@Table(name = "MIDIA")
 public class Midia {
+
     @Id
     @GeneratedValue
     @Column(name = "COD_MIDIA", nullable = false)
     private Long codMidia;
-    
+
     @Column(name = "TIPO_MIDIA", nullable = false, length = 1)
     private String tipoMidia;
-    
+
     @Column(name = "NOME_MIDIA", nullable = false, length = 255)
     private String nomeMidia;
-    
+
     @Column(name = "DESCRICAO", length = 255)
     private String descricao;
-    
+
     @Column(name = "IMAGEM")
     private byte[] imagem;
-    
+
     @Column(name = "VALOR_MIDIA", precision = 2, nullable = false)
     private Double valorMidia;
-    
-    @OneToMany(targetEntity = MidiaAutor.class)
-    private List<MidiaAutor> codAutor;
-    
+
+    @OneToOne
+    @JoinColumn(name="COD_USUARIO", referencedColumnName="COD_USUARIO")
+    private Usuario codAutor;
+
     @Column(name = "CONTEUDO_MIDIA", nullable = false)
     private byte[] conteudoMidia;
-    
+
     @Column(name = "DATA_CRIACAO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataCriacao;
-    
-    @OneToOne(targetEntity = CategoriaMidia.class)
-    @JoinColumn(name = "COD_CATEGORIA", nullable = false)
-    private CategoriaMidia codCategoria;
 
-    @Column(name = "DURACAO", nullable = false)
-    private Double duracao;
+    @Column(name = "CATEGORIA", length = 255)
+    private String categoria;
     
     public Midia() {
     }
 
-    public Midia(Long codMidia, String tipoMidia, String nomeMidia, String descricao, byte[] imagem, Double valorMidia, byte[] conteudoMidia, Date dataCriacao, CategoriaMidia codCategoria, Double duracao) {
+    public Midia(Long codMidia, String tipoMidia, String nomeMidia, String descricao, byte[] imagem, Double valorMidia, byte[] conteudoMidia, Date dataCriacao, String categoria) {
         this.codMidia = codMidia;
         this.tipoMidia = tipoMidia;
         this.nomeMidia = nomeMidia;
@@ -74,19 +71,15 @@ public class Midia {
         this.valorMidia = valorMidia;
         this.conteudoMidia = conteudoMidia;
         this.dataCriacao = dataCriacao;
-        this.codCategoria = codCategoria;
-        this.duracao = duracao;
+        this.categoria = categoria;
+    }
+    public String getCategoria() {
+        return categoria;
     }
 
-    public Double getDuracao() {
-        return duracao;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
-
-    public void setDuracao(Double duracao) {
-        this.duracao = duracao;
-    }
-
-    
 
     public Long getCodMidia() {
         return codMidia;
@@ -136,11 +129,11 @@ public class Midia {
         this.valorMidia = valorMidia;
     }
 
-    public List<MidiaAutor> getCodAutor() {
+    public Usuario getCodAutor() {
         return codAutor;
     }
 
-    public void setCodAutor(List<MidiaAutor> codAutor) {
+    public void setCodAutor(Usuario codAutor) {
         this.codAutor = codAutor;
     }
 
@@ -160,13 +153,4 @@ public class Midia {
         this.dataCriacao = dataCriacao;
     }
 
-    public CategoriaMidia getCodCategoria() {
-        return codCategoria;
-    }
-
-    public void setCodCategoria(CategoriaMidia codCategoria) {
-        this.codCategoria = codCategoria;
-    }
-    
 }
-
