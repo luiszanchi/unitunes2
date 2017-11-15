@@ -46,6 +46,22 @@ and open the template in the editor.
                                 </td>
                             </tr>
                             <tr>
+                                <td><h:outputText value="Email: "/></td>
+                                <td>
+                                    <p:inputText value="#{usuariosGerenciar.userEdit.email}" required="true" validatorMessage="Por favor, insira um endereço de e-mail válido">
+                                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                    </p:inputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><h:outputText value="Senha: "/></td>
+                                <td>
+                                    <p:password value="#{usuariosGerenciar.userEdit.senha}"  validatorMessage="Por favor, insira uma senha">
+                                        <f:validateLength minimum="6" maximum="20" />
+                                    </p:password>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td></td>
                                 <td><p:commandButton value="Editar" action="#{usuariosGerenciar.editaUsuario()}" /></td>
                             </tr>

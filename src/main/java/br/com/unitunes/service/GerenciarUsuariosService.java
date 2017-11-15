@@ -53,12 +53,11 @@ public class GerenciarUsuariosService {
                 if(ud == null){
             ud = new UsuarioDao();
         }
-        Boolean a = ud.excluit(u);
+        Boolean a = ud.excluir(u);
         if(a)
             System.out.println("Usuario Excluido Com Sucesso");
         else 
             System.out.println("Usuário não excluido");
->>>>>>> origin/master
     }
     
 }

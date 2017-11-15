@@ -16,6 +16,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+
 /**
  *
  * @author LuisFernandoTorriani
@@ -30,6 +31,7 @@ public class LoginBean implements Serializable{
     private String email;
     private String login;
     private String senha;
+    private User usuario; 
     
 
     public LoginBean() {
@@ -37,6 +39,7 @@ public class LoginBean implements Serializable{
         email = new String();
         login = new String();
         senha = new String();
+        usuario = new User();
     }
 
     public LoginBean(UserLogin userLogin, String email, String login, String senha) {
@@ -44,6 +47,14 @@ public class LoginBean implements Serializable{
         this.email = email;
         this.login = login;
         this.senha = senha;
+    }
+
+    public User getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(User usuario) {
+        this.usuario = usuario;
     }
 
   
@@ -107,6 +118,7 @@ public class LoginBean implements Serializable{
             // new NamedParams("id", user.getId())).get(0);
             // logger.info("Login efetuado com sucesso");
             SessionContext.getInstance().setAttribute("user", user);
+            usuario = user;
             return "/index.xhtml?faces-redirect=true";
         } catch (Exception e) {
             System.out.println(login+" - "+senha);

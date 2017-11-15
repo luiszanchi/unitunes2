@@ -57,6 +57,7 @@ public abstract class Dao<T, I extends Serializable> {
             this.close();
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -72,11 +73,12 @@ public abstract class Dao<T, I extends Serializable> {
             this.close();
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
 
-    public Boolean excluit(T item) {
+    public Boolean excluir(T item) {
         try {
             this.conectar();
             EntityManager em = this.getEntityManager();
@@ -87,6 +89,7 @@ public abstract class Dao<T, I extends Serializable> {
             this.close();
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }

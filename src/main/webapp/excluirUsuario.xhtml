@@ -18,7 +18,7 @@ and open the template in the editor.
                     <f:metadata>
                         <f:viewParam name="codUsuario" value="#{usuariosGerenciar.userDeletePK}" />
 
-                        <f:event type="preRenderView" listener="#{usuariosGerenciar.carregarEditar(usuariosGerenciar.userDeletePK)}" />
+                        <f:event type="preRenderView" listener="#{usuariosGerenciar.carregarExcluir(usuariosGerenciar.userDeletePK)}" />
                     </f:metadata>
                     <table>
                         <tbody>
@@ -28,26 +28,27 @@ and open the template in the editor.
                             </tr>
                             <tr>
                                 <td><h:outputText value="Nome: "/></td>
-                                <td><p:inputText  value="#{usuariosGerenciar.userDelete.nomeUsuario}"/></td>
+                                <td><h:outputText  value="#{usuariosGerenciar.userDelete.nomeUsuario}"/></td>
                             </tr>
                             <tr style="height: 50px;">
                                 <td><h:outputText value="Ativo: "/></td>
-                                <td><p:inputSwitch value="#{usuariosGerenciar.userDelete.snAtivoParam}"/></td>
+                                <td><h:outputText value="#{usuariosGerenciar.userDelete.snAtivoParam}"/></td>
                             </tr>
                             <tr>
                                 <td><h:outputText value="Perfil: " /></td>
-                                <td>
-                                    <p:selectOneMenu value="#{usuariosGerenciar.userDelete.tipoUsuario}" style="width:125px">
-                                        <f:selectItem itemLabel="Selecione" itemValue=""/>
-                                        <f:selectItem itemLabel="Administrador" itemValue="D"/>
-                                        <f:selectItem itemLabel="Autor" itemValue="U"/>
-                                        <f:selectItem itemLabel="Academico" itemValue="A"/>
-                                    </p:selectOneMenu>
-                                </td>
+                                <td><h:outputText value="#{usuariosGerenciar.userDelete.tipoUsuario}" /></td>
+                            </tr>
+                            <tr>
+                                <td><h:outputText value="Email: "/></td>
+                                <td><h:outputText value="#{usuariosGerenciar.userDelete.email}"/></td>
+                            </tr>
+                            <tr>
+                                <td><h:outputText value="Senha: "/></td>
+                                <td><h:outputText value="#{usuariosGerenciar.userDelete.senha}"/></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td><p:commandButton value="Editar" action="#{usuariosGerenciar.excluirUsuario()}" /></td>
+                                <td><p:commandButton value="Excluir" action="#{usuariosGerenciar.excluirUsuario()}" /></td>
                             </tr>
                         </tbody>
                     </table>

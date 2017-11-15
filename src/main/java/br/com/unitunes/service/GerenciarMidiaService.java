@@ -46,7 +46,7 @@ public class GerenciarMidiaService {
                 if(ud == null){
             ud = new MidiaDao();
         }
-        Boolean a = ud.excluit(u);
+        Boolean a = ud.excluir(u);
         if(a)
             System.out.println("Midia Excluida Com Sucesso");
         else 

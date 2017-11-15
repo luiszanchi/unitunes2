@@ -5,13 +5,17 @@
  */
 package br.com.unitunes.session;
 
+import br.com.unitunes.dao.UsuarioDao;
+import br.com.unitunes.entity.Usuario;
+
 /**
  *
  * @author LuisFernandoTorriani
  */
 public class UserLogin {
+
     private String user;
-    
+
     private String passwd;
 
     public UserLogin() {
@@ -37,25 +41,39 @@ public class UserLogin {
     public void setPasswd(String passwd) {
         this.passwd = passwd;
     }
-    
-    public User isUsuarioReadyToLogin(String l, String s){
+
+    public User isUsuarioReadyToLogin(String l, String s) {
         User user = new User();
-        if(l.equalsIgnoreCase("admin@unitunes.com") && s.equals("admin")){
-            user.setCodUsuario("1");
-            user.setNomeUsuario(l);
-            user.setTipoUsuario("D");
-        }else if(l.equalsIgnoreCase("autor@unitunes.com") && s.equals("autor")){
-            user.setCodUsuario("2");
-            user.setNomeUsuario(l);
-            user.setTipoUsuario("U");
-        }else if(l.equalsIgnoreCase("academico@unitunes.com") && s.equals("academico")){
-            user.setCodUsuario("3");
-            user.setNomeUsuario(l);
-            user.setTipoUsuario("A");
-        }else{
-            return null;
+        Usuario u;
+        UsuarioDao ud = new UsuarioDao();
+        if (l.equalsIgnoreCase("admin@unitunes.com")) { // && s.equals("admin")
+            u = ud.getQueryList("from Usuario u where u.email = '" + l + "' and u.senha = '" + s + "'").get(0);
+            if (u == null) {
+                u = new Usuario();
+                u.setEmail("admin@unitunes.com");
+                u.setSenha("admin");
+                u.setSnAtivo("S");
+                u.setTipoUsuario("D");
+                u.setNomeUsuario("Administrador do Sistema");
+                ud.adicionar(u);
+                u = ud.getQueryList("from Usuario u where u.email = '" + l + "' and u.senha = '" + s + "'").get(0);
+                user.setCodUsuario(u.getCodUsuario().toString());
+                user.setEmailUsuario(u.getEmail());
+                user.setNomeUsuario(u.getNomeUsuario());
+                user.setTipoUsuario(u.getTipoUsuario());
+            }
+        } else {
+            u = ud.getQueryList("from Usuario u where u.email = '" + l + "' and u.senha = '" + s + "'").get(0);
+            if (u == null) {
+                return null;
+            } else {
+                user.setCodUsuario(u.getCodUsuario().toString());
+                user.setEmailUsuario(u.getEmail());
+                user.setNomeUsuario(u.getNomeUsuario());
+                user.setTipoUsuario(u.getTipoUsuario());
+            }
         }
-        
+
         return user;
     }
 }

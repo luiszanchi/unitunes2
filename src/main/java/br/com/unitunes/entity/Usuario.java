@@ -37,9 +37,34 @@ public class Usuario {
     @Column(name="SN_ATIVO", nullable = false, length = 1)
     private String snAtivo = "S";
     
+    @Column(name="EMAIL", nullable = false, length = 100, unique = true)
+    private String email;
+    
+    @Column(name="SENHA", nullable = false, length = 8)
+    private String senha;
+    
     @Transient
     private Boolean snAtivoParam = true;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        if((!senha.isEmpty()) && (!senha.contains("**")))
+            this.senha = senha;
+    }
+
+    
+    
     public Boolean getSnAtivoParam() {
         return snAtivoParam;
     }

@@ -14,15 +14,26 @@ public class User {
     
     private String nomeUsuario;
     
+    private String emailUsuario;
+    
     private String tipoUsuario;
 
     public User() {
     }
 
-    public User(String codUsuario, String nomeUsuario, String tipoUsuario) {
+    public User(String codUsuario, String nomeUsuario, String emailUsuario, String tipoUsuario) {
         this.codUsuario = codUsuario;
         this.nomeUsuario = nomeUsuario;
+        this.emailUsuario = emailUsuario;
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public String getEmailUsuario() {
+        return emailUsuario;
+    }
+
+    public void setEmailUsuario(String emailUsuario) {
+        this.emailUsuario = emailUsuario;
     }
 
     public String getCodUsuario() {

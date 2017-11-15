@@ -25,6 +25,9 @@ and open the template in the editor.
                 <p:column headerText="Ativo">
                     <h:outputText value="#{usuario.snAtivo}" />
                 </p:column>
+                <p:column headerText="Email">
+                    <h:outputText value="#{usuario.email}"/>
+                </p:column>
                 <p:column headerText="Editar">
                     <p:link outcome="editarUsuario" value="EDITAR">
                             <f:param name="codUsuario" value="#{usuario.codUsuario}" />
@@ -32,7 +35,7 @@ and open the template in the editor.
                 </p:column>
                 <p:column headerText="Excluir">
 
-                    <p:link outcome="excluirUsuario" value="EDITAR">
+                    <p:link outcome="excluirUsuario" value="EXCLUIR">
                             <f:param name="codUsuario" value="#{usuario.codUsuario}" />
                     </p:link>                    
                 </p:column>

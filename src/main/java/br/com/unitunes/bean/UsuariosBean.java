@@ -30,7 +30,27 @@ public class UsuariosBean implements Serializable{
    
     private Usuario userEdit;
     private Long userEditPK;
+    
+    private Usuario userDelete;
+    private Long userDeletePK;
 
+    public Usuario getUserDelete() {
+        return userDelete;
+    }
+
+    public void setUserDelete(Usuario userDelete) {
+        this.userDelete = userDelete;
+    }
+
+    public Long getUserDeletePK() {
+        return userDeletePK;
+    }
+
+    public void setUserDeletePK(Long userDeletePK) {
+        this.userDeletePK = userDeletePK;
+    }
+
+    
     public Long getUserEditPK() {
         return userEditPK;
     }
@@ -45,13 +65,18 @@ public class UsuariosBean implements Serializable{
     }
     
     public void carregarEditar(Long codUsuario){
+        verificaUsuarioService();
+        this.userEdit = this.gerenciarUsuariosService.buscaUsuario(codUsuario);
+    }
+    public void carregarExcluir(Long codUsuario){
+        verificaUsuarioService();
+        this.userDelete = this.gerenciarUsuariosService.buscaUsuario(codUsuario);
+    }
+    public void verificaUsuarioService(){
         if(this.gerenciarUsuariosService == null){
             this.gerenciarUsuariosService = new GerenciarUsuariosService();
         }
-        this.userEdit = this.gerenciarUsuariosService.buscaUsuario(codUsuario);
     }
-    
-    
 
     public UsuariosBean(Usuario user) {
         this.user = user;
@@ -79,8 +104,13 @@ public class UsuariosBean implements Serializable{
         return "gerenciarUsuario.xhtml?faces-redirect=true";
     } 
     public String editaUsuario(){
-        System.out.println(this.user.getNomeUsuario()+" - "+this.user.getSnAtivo()+" - "+this.user.getTipoUsuario());
-        this.gerenciarUsuariosService.editarUsuario(user);
+        System.out.println(this.userEdit.getNomeUsuario()+" - "+this.userEdit.getSnAtivo()+" - "+this.userEdit.getTipoUsuario());
+        this.gerenciarUsuariosService.editarUsuario(userEdit);
+        return "gerenciarUsuario.xhtml?faces-redirect=true";
+    } 
+    public String excluiUsuario(){
+        System.out.println(this.userDelete.getNomeUsuario()+" - "+this.userDelete.getSnAtivo()+" - "+this.userDelete.getTipoUsuario());
+        this.gerenciarUsuariosService.excluirUsuario(userDelete);
         return "gerenciarUsuario.xhtml?faces-redirect=true";
     }
     
