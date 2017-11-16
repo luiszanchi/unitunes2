@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="template.xhtml">
+        <ui:define name="conteudo">
+            <link href="css/primefaces/inputswitch.css" rel="stylesheet" type="text/css" media="all" />
+            <center>
+                
+                <h:form id="form">
+                        <tbody>
+                            
+                            <tr>
+                                <td><h:outputText value="Tipo de Midia" style="font-weight: bold"  /></td>
+                                    
+                                <div>
+                                <td>
+                                    <p:selectOneMenu value="#{GerenciarMidia.tipo}" style="width:180px;" >
+                                        <p:ajax update="@this" />
+                                        <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItem itemLabel="Livro" itemValue="L"/>
+                                        <f:selectItem itemLabel="Podcast" itemValue="P"/>
+                                        <f:selectItem itemLabel="Video" itemValue="V"/>
+                                        <f:selectItem itemLabel="Musica" itemValue="M"/>
+                                    </p:selectOneMenu>
+                                </td>
+                                    </div>
+                                <div>
+                                <td><p:commandButton value="Selecionar" action="#{GerenciarMidia.selecionarMidias()}"  oncomplete="submit()" style=" margin-bottom:50px;margin-top: 10px" /></td>
+                                <td><p:commandButton value="Atualizar" action="#{GerenciarMidia.atualizar()}"  oncomplete="submit()" style=" margin-bottom:50px;margin-top: 10px" /></td>
+                                </div>
+                            </tr>
+                        </tbody>
+                 </h:form>             
+                            
+                
+            <p:growl id="msgs" showDetail="true" />
+            <p:dataTable  id="output" var="midia" value="#{GerenciarMidia.selecionarMidias()}">
+                <p:column headerText="Cod" style="width:10%">
+                    <h:outputText value="#{midia.codMidia}" />
+                </p:column>
+                <p:column headerText="Nome" style="width:25%">
+                    <h:outputText value="#{midia.nomeMidia}" />
+                </p:column>
+                <p:column headerText="Descrição" style="width:30%">
+                    <h:outputText value="#{midia.descricao}" />
+                </p:column>
+                <p:column headerText="Valor" style="width:8%">
+                    <h:outputText value=" R$ - #{midia.valorMidia}" />
+                </p:column>
+                <p:column headerText="Midia" style="width:20%" >    
+                     <h:form>
+                         <p:commandButton value="Play"  ajax="true"  update="player" actionListener="#{GerenciarMidia.carregarMidia(midia)}" onclick="PF('dlg1').show();" rendered="#{GerenciarMidia.isMusicaGerencia or GerenciarMidia.isPodcast}"/>
+                         <p:commandButton value="PlayVideo"  ajax="true"  update="playervideo" actionListener="#{GerenciarMidia.carregarMidia(midia)}" onclick="PF('dlg1').show();" rendered="#{GerenciarMidia.isVideoGerencia}"/>
+                       <p:commandButton value="Alterar"  actionListener="#{GerenciarMidia.carregarMidia(midia)}"/>
+                    </h:form>
+                </p:column>
+                <p:column headerText="Imagem" style="width:10%">
+                    <img src="images/22.jpg" alt="" width="100%" height="70px" />
+                </p:column>
+            </p:dataTable>
+            
+            <p:dialog header="Player" widgetVar="dlg1" minHeight="40" id="dialog" rendered="#{GerenciarMidia.isMusicaGerencia or GerenciarMidia.isPodcast}" showEffect="explode"  >
+                      <p:outputPanel id="player" style="text-align:center;">
+                      <div>
+                        <h:outputText value="#{GerenciarMidia.midiaGerencia.nomeMidia}" />
+                      </div>
+                      <audio controls="controls" controlsList="nodownload" >
+                          <source src="Avivamento.mp3" type="audio/mpeg " />
+                      </audio>
+                         
+                    </p:outputPanel>
+                </p:dialog>
+            
+            
+            <p:dialog header="Player" widgetVar="dlg1" minHeight="40" rendered="#{GerenciarMidia.isVideoGerencia}" showEffect="explode" minimizable="true" >
+                    <p:outputPanel id="playervideo" style="text-align:center;">
+                        <div>
+                            <h:outputText value="#{GerenciarMidia.midiaGerencia.nomeMidia}" />
+                        </div>
+                        <video width="320" height="240" controls="controls" controlsList="nodownload">
+                                <source src="teste.mp4" type="video/mp4"/>
+                        </video> 
+                    </p:outputPanel>
+                </p:dialog>
+            </center>
+        </ui:define>        
+    </ui:composition>
+</html>
