@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="template.xhtml">
+        <ui:define name="conteudo">
+            <link href="css/primefaces/inputswitch.css" rel="stylesheet" type="text/css" media="all" />
+            <center>
+                
+                <h:form id="form">
+                        <tbody>
+                            
+                            <tr>
+                                <td><h:outputText value="Tipo de Midia" style="font-weight: bold"  /></td>
+                                    
+                                <div>
+                                <td>
+                                    <p:selectOneMenu value="#{CompraMidia.tipo}" style="width:180px;" >
+                                        <p:ajax update="@this" />
+                                        <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true"/>
+                                        <f:selectItem itemLabel="Livro" itemValue="L"/>
+                                        <f:selectItem itemLabel="Podcast" itemValue="P"/>
+                                        <f:selectItem itemLabel="Video" itemValue="V"/>
+                                        <f:selectItem itemLabel="Musica" itemValue="M"/>
+                                    </p:selectOneMenu>
+                                </td>
+                                    </div>
+                                <div>
+                                <td><p:commandButton value="Selecionar" action="#{CompraMidia.selecionarMidias()}"  oncomplete="submit()" style=" margin-bottom:50px;margin-top: 10px" /></td>
+                                <td><p:commandButton value="Atualizar" action="#{CompraMidia.atualizar()}"  oncomplete="submit()" style=" margin-bottom:50px;margin-top: 10px" /></td>
+                                </div>
+                            </tr>
+                        </tbody>
+                 </h:form>             
+                            
+                
+            <p:growl id="msgs" showDetail="true" />
+            <p:dataTable  id="output" var="midia" value="#{CompraMidia.midiasPorTipo}">
+                <p:column headerText="Cod" style="width:10%">
+                    <h:outputText value="#{midia.codMidia}" />
+                </p:column>
+                <p:column headerText="Nome" style="width:25%">
+                    <h:outputText value="#{midia.nomeMidia}" />
+                </p:column>
+                <p:column headerText="Descrição" style="width:30%">
+                    <h:outputText value="#{midia.descricao}" />
+                </p:column>
+                <p:column headerText="Valor" style="width:8%">
+                    <h:outputText value=" R$ - #{midia.valorMidia}" />
+                </p:column>
+                <p:column headerText="Comprar" style="width:20%" >    
+                    <p:link outcome="ComprarMidia" value="COMPRA">
+                        <f:param name="codMidia" value="#{midia.codMidia}" />
+                    </p:link>   
+                </p:column>
+                <p:column headerText="Imagem" style="width:10%">
+                    <img src="images/#{midia.codMidia}.jpg" alt="" width="100%" height="70px" />
+                </p:column>
+            </p:dataTable>
+           
+            </center>
+        </ui:define>        
+    </ui:composition>
+</html>

@@ -61,6 +61,11 @@ public class UserLogin {
                 user.setEmailUsuario(u.getEmail());
                 user.setNomeUsuario(u.getNomeUsuario());
                 user.setTipoUsuario(u.getTipoUsuario());
+            }else{
+                user.setCodUsuario(u.getCodUsuario().toString());
+                user.setEmailUsuario(u.getEmail());
+                user.setNomeUsuario(u.getNomeUsuario());
+                user.setTipoUsuario(u.getTipoUsuario());
             }
         } else {
             u = ud.getQueryList("from Usuario u where u.email = '" + l + "' and u.senha = '" + s + "'").get(0);

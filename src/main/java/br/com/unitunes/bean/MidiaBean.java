@@ -12,7 +12,16 @@ import br.com.unitunes.service.GerenciarMidiaService;
 import br.com.unitunes.service.GerenciarUsuariosService;
 import br.com.unitunes.session.SessionContext;
 import br.com.unitunes.session.User;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +32,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 
@@ -51,15 +62,63 @@ public class MidiaBean  implements Serializable{
     private boolean isVideoGerencia;
     UploadedFile imagem;
     UploadedFile conteudo;
+    String javaUser;
+
+    public String getJavaUser() {
+        return javaUser;
+    }
     User user;
     String tipo = "";
 
     public boolean carregarMidia(Midia midiaAtual){
          this.midiaGerencia.setNomeMidia(midiaAtual.getNomeMidia());
          this.midiaGerencia.setConteudoMidia(midiaAtual.getConteudoMidia());
+         
+         //TODO
+         //javaUser = System.getProperty("user.home");
+         javaUser = "D:\\MINHAS COISAS\\unisinos\\TrabalhoArquiteturaSoftware\\unitunes2\\src\\main\\webapp\\musica.mp3";
+         File arq = new File("C:\\musica.mp3");
+
+         FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(javaUser);
+            fos.write(midiaGerencia.getConteudoMidia());
+            FileDescriptor fd = fos.getFD();
+            fos.flush();
+            fd.sync();
+            fos.close(); 
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("GerenciarMidias.xhtml");
+        } catch (IOException ex) {
+            Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
          return true;
 
      }
+
+    public StreamedContent getMedia() {
+        return media;
+    }
+    
+     public void mediaControle(Midia midiaAtual){
+         
+         ByteArrayInputStream bis = new ByteArrayInputStream(midiaAtual.getConteudoMidia());
+         
+         InputStream stream = bis;
+         
+         media = new DefaultStreamedContent(stream, "audio/mpeg") ;
+         
+     }
+    
+    
+    private StreamedContent media;
+    
+    
     
     @PostConstruct
     public void init(){
@@ -140,11 +199,11 @@ public class MidiaBean  implements Serializable{
             midia = new Midia();
             midiaGerencia = new Midia();
             
-            FacesContext.getCurrentInstance().getExternalContext().redirect("GerenciarMidia.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("GerenciarMidias.xhtml");
         } catch (IOException ex) {
             Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "GerenciarMidia.xhtml?faces-redirect=true";
+        return "GerenciarMidias.xhtml?faces-redirect=true";
     } 
        
     public void CarregaImagem(FileUploadEvent event) {

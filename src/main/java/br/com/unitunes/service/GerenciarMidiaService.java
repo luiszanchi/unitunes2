@@ -59,4 +59,21 @@ public class GerenciarMidiaService {
         }
         return ud.getQueryList("from Midia mid where mid.codAutor.codUsuario =" + usuario);
     }
+      
+    public List<Midia> buscarMidiasCompra(String usuario){
+         if(ud == null){
+            ud = new MidiaDao();
+        }
+        return ud.getQueryList("from Midia mid where mid.codAutor.codUsuario != " + usuario);
+    }
+    
+    public List<Midia> buscarMidiasComprav2(String usuario){
+         if(ud == null){
+            ud = new MidiaDao();
+        }
+        return ud.getQueryList("from Midia mid where mid.codMidia not in "
+                + "(select cmp.codMidia from Compra cmp where cmp.codUsuario ="+ usuario +")"
+                        + " and mid.codAutor.codUsuario != " + usuario);
+    }
+    
 }

@@ -22,6 +22,35 @@ public class Compra {
     @GeneratedValue
     @Column(name = "COD_COMPRA")
     private Long codCompra;
+
+    @Column(name = "COD_MIDIA")
+    private Long codMidia;
     
-    //@Column(name = )
+    @Column(name = "COD_USUARIO")
+    private Long codUsuario;
+
+    public Long getCodUsuario() {
+        return codUsuario;
+    }
+
+    public void setCodUsuario(Long codUsuario) {
+        this.codUsuario = codUsuario;
+    }
+    
+    public Long getCodCompra() {
+        return codCompra;
+    }
+
+    public void setCodCompra(Long codCompra) {
+        this.codCompra = codCompra;
+    }
+
+    public Long getCodMidia() {
+        return codMidia;
+    }
+
+    public void setCodMidia(Long codMidia) {
+        this.codMidia = codMidia;
+    }
+    
 }

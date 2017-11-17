@@ -17,6 +17,7 @@ and open the template in the editor.
                 <h:form>
                     <table>
                         <tbody>
+                            <p:growl id="messages" showDetail="true" />
                             <tr>
                                 <td><h:outputText value="Nome: "/></td>
                                 <td>
@@ -59,7 +60,7 @@ and open the template in the editor.
                             </tr>
                             <tr>
                                 <td></td>
-                                <td><p:commandButton value="Cadastrar" action="#{usuariosGerenciar.salvaUsuario()}" /></td>
+                                <td><p:commandButton value="Salvar" update="messages" ajax="false" actionListener="#{usuariosGerenciar.salvaUsuario()}" style="margin-left: 100%;margin-top: 20px" /></td>
                             </tr>
                         </tbody>
                     </table>

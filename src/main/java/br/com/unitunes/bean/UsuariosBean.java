@@ -14,13 +14,14 @@ import br.com.unitunes.entity.Usuario;
 import br.com.unitunes.service.GerenciarUsuariosService;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.bean.SessionScoped;
 
 /**
  *
  * @author LuisFernandoTorriani
  */
 @ManagedBean(name = "usuariosGerenciar")
-@ViewScoped
+@SessionScoped
 public class UsuariosBean implements Serializable{
     private List<Usuario> usuarios;
     
@@ -99,9 +100,12 @@ public class UsuariosBean implements Serializable{
         this.user = user;
     }
     public String salvaUsuario(){
-        System.out.println(this.user.getNomeUsuario()+" - "+this.user.getSnAtivo()+" - "+this.user.getTipoUsuario());
-        this.gerenciarUsuariosService.cadastrarUsuario(user);
-        return "gerenciarUsuario.xhtml?faces-redirect=true";
+       System.out.println(this.user.getNomeUsuario()+" - "+this.user.getSnAtivo()+" - "+this.user.getTipoUsuario());
+       this.gerenciarUsuariosService.cadastrarUsuario(user);
+       this.user.setNomeUsuario("");
+       this.user.setSnAtivo("");
+       this.user.setTipoUsuario("");        
+       return "gerenciarUsuario.xhtml?faces-redirect=true";
     } 
     public String editaUsuario(){
         System.out.println(this.userEdit.getNomeUsuario()+" - "+this.userEdit.getSnAtivo()+" - "+this.userEdit.getTipoUsuario());
