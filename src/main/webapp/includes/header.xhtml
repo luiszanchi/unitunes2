@@ -9,8 +9,9 @@ and open the template in the editor.
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <h:body>
         <ui:composition>
+          <h:body>
+           <form>
             <div class="agileits_header">
                 <div class="container">
                     <div class="w3l_offers">
@@ -21,11 +22,20 @@ and open the template in the editor.
                             <li><a href="cadastrarUsuario.xhtml"> Criar Conta </a></li>
                             <li><a href="login.xhtml"> Logar </a></li>
                             <li><a href="footer.xhtml"> Ajuda </a></li>
-                            <li><a>Cod: <h:outputText value="#{usuarioLogadoMB.usuario.codUsuario}"/> - Nome: <h:outputText value="#{usuarioLogadoMB.usuario.nomeUsuario}"/> - Email: <h:outputText value="#{usuarioLogadoMB.usuario.emailUsuario}"/> - Tipo: <h:outputText value="#{usuarioLogadoMB.usuario.tipoUsuario}"/></a></li>
                         </ul>
-                    </div>
+                            <div>
+                                <li><a>Cod : <h:outputText value="#{usuarioLogadoMB.usuario.codUsuario}"/></a>
+                               <a> Nome : <h:outputText value="#{usuarioLogadoMB.usuario.nomeUsuario}"/></a>
+                               </li>
+                                <li>
+                                <a>Email : <h:outputText value="#{usuarioLogadoMB.usuario.emailUsuario}"/></a>
+                                <a>Tipo : <h:outputText value="#{usuarioLogadoMB.usuario.tipoUsuario}"/></a>
+                                </li>
+                            </div> 
+                            </div>
                 </div>
             </div>
+            </form>
+        </h:body>
         </ui:composition>
-    </h:body>
 </html>
