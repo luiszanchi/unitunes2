@@ -53,6 +53,16 @@ public class User {
     }
 
     public String getTipoUsuario() {
+        if (tipoUsuario.equalsIgnoreCase("D")){
+            return "Administrador";
+        }
+        if (tipoUsuario.equalsIgnoreCase("U")){
+            return "Autor";
+        }
+        if (tipoUsuario.equalsIgnoreCase("A")){
+            return "Academico";
+        }
+
         return tipoUsuario;
     }
 

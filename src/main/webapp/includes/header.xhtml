@@ -13,6 +13,13 @@ and open the template in the editor.
           <h:body>
            <form>
             <div class="agileits_header">
+                        <div>
+                            <li><a>Cod : <h:outputText value="#{usuarioLogadoMB.usuario.codUsuario}" style="color: white"/></a>
+                            <a> Nome : <h:outputText value="#{usuarioLogadoMB.usuario.nomeUsuario}" style="color: white"/></a>
+                            <a>Email : <h:outputText value="#{usuarioLogadoMB.usuario.emailUsuario}" style="color: white"/></a>
+                            <a>Tipo : <h:outputText value="#{usuarioLogadoMB.usuario.tipoUsuario}" style="color: white"/></a>
+                            </li>
+                        </div> 
                 <div class="container">
                     <div class="w3l_offers">
                         <p> <a href="products.html"></a></p>
@@ -23,17 +30,8 @@ and open the template in the editor.
                             <li><a href="login.xhtml"> Logar </a></li>
                             <li><a href="footer.xhtml"> Ajuda </a></li>
                         </ul>
-                            <div>
-                                <li><a>Cod : <h:outputText value="#{usuarioLogadoMB.usuario.codUsuario}"/></a>
-                               <a> Nome : <h:outputText value="#{usuarioLogadoMB.usuario.nomeUsuario}"/></a>
-                               </li>
-                                <li>
-                                <a>Email : <h:outputText value="#{usuarioLogadoMB.usuario.emailUsuario}"/></a>
-                                <a>Tipo : <h:outputText value="#{usuarioLogadoMB.usuario.tipoUsuario}"/></a>
-                                </li>
-                            </div> 
-                            </div>
-                </div>
+                    </div>
+                    </div >
             </div>
             </form>
         </h:body>

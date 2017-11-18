@@ -5,10 +5,14 @@
  */
 package br.com.unitunes.bean;
 
+import br.com.unitunes.entity.Configuracao;
+import br.com.unitunes.service.GerenciaConfigService;
+import br.com.unitunes.session.Config;
 import br.com.unitunes.session.SessionContext;
 import br.com.unitunes.session.UserLogin;
 import br.com.unitunes.session.User;
 import java.io.Serializable;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -106,7 +110,6 @@ public class LoginBean implements Serializable{
             if(userLogin==null){
                 userLogin = new UserLogin();
             }
-            //logger.info("Tentando logar com usuário " + login);
             User user = userLogin.isUsuarioReadyToLogin(login, senha);
 
             if (user == null) {
@@ -114,9 +117,20 @@ public class LoginBean implements Serializable{
                 return null;
             }
 
-            //User usuario = (User) getUserBO().findByNamedQuery(Usuario.FIND_BY_ID,
-            // new NamedParams("id", user.getId())).get(0);
-            // logger.info("Login efetuado com sucesso");
+            GerenciaConfigService configaService = new GerenciaConfigService();
+            try {
+                List<Configuracao> listaConfiguracao = configaService.buscarConfiguracao();
+                if ( listaConfiguracao != null && listaConfiguracao.get(0) != null && listaConfiguracao.get(0).getCaminhoBase() != null && listaConfiguracao.get(0).getCaminhoFoto() != null){
+                    SessionContext.getInstance().setAttribute("config", new Config(listaConfiguracao.get(0).getCaminhoBase(), listaConfiguracao.get(0).getCaminhoFoto()));
+                }else{
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Adicionar Configurações"));
+                    return null;
+                }
+            } catch (Exception e) {
+                  FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Adicionar Configurações"));
+                  return null;
+            }
+            
             SessionContext.getInstance().setAttribute("user", user);
             usuario = user;
             return "/index.xhtml?faces-redirect=true";

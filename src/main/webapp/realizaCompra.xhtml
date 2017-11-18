@@ -13,39 +13,34 @@ and open the template in the editor.
     <ui:composition template="template.xhtml">
         <ui:define name="conteudo">
             <link href="css/primefaces/inputswitch.css" rel="stylesheet" type="text/css" media="all" />
-            <center>
-                
+                <center> 
                 <h:form id="form">
-                        <tbody>
-                            
-                            <tr>
-                                <td><h:outputText value="Tipo de Midia" style="font-weight: bold"  /></td>
-                                    
+                    <tbody>
+                        <tr>
+                            <td><h:outputText value="Tipo de Midia" style="font-weight: bold"  /></td>
                                 <div>
-                                <td>
-                                    <p:selectOneMenu value="#{CompraMidia.tipo}" style="width:180px;" >
-                                        <p:ajax update="@this" />
-                                        <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true"/>
-                                        <f:selectItem itemLabel="Livro" itemValue="L"/>
-                                        <f:selectItem itemLabel="Podcast" itemValue="P"/>
-                                        <f:selectItem itemLabel="Video" itemValue="V"/>
-                                        <f:selectItem itemLabel="Musica" itemValue="M"/>
-                                    </p:selectOneMenu>
-                                </td>
-                                    </div>
-                                <div>
-                                <td><p:commandButton value="Selecionar" action="#{CompraMidia.selecionarMidias()}"  oncomplete="submit()" style=" margin-bottom:50px;margin-top: 10px" /></td>
-                                <td><p:commandButton value="Atualizar" action="#{CompraMidia.atualizar()}"  oncomplete="submit()" style=" margin-bottom:50px;margin-top: 10px" /></td>
+                                    <td>
+                                        <p:selectOneMenu value="#{CompraMidia.tipo}" style="width:180px;" >
+                                            <p:ajax update="@this" />
+                                            <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Livro" itemValue="L"/>
+                                            <f:selectItem itemLabel="Podcast" itemValue="P"/>
+                                            <f:selectItem itemLabel="Video" itemValue="V"/>
+                                            <f:selectItem itemLabel="Musica" itemValue="M"/>
+                                        </p:selectOneMenu>
+                                    </td>
                                 </div>
-                            </tr>
+                                <div>
+                                    <td><p:commandButton value="Selecionar" action="#{CompraMidia.selecionarMidias()}"  oncomplete="submit()" style=" margin-bottom:50px;margin-top: 10px" /></td>
+                                    <td><p:commandButton value="Atualizar" action="#{CompraMidia.atualizar()}"  oncomplete="submit()" style=" margin-bottom:50px;margin-top: 10px" /></td>
+                                </div>
+                        </tr>
                         </tbody>
                  </h:form>             
-                            
-                
             <p:growl id="msgs" showDetail="true" />
-            <p:dataTable  id="output" var="midia" value="#{CompraMidia.midiasPorTipo}">
+            <p:dataTable  id="output" var="midia" value="#{CompraMidia.midiasPorTipo}" >
                 <p:column headerText="Cod" style="width:10%">
-                    <h:outputText value="#{midia.codMidia}" />
+                    <h:outputText value="#{midia.codMidia}"  />
                 </p:column>
                 <p:column headerText="Nome" style="width:25%">
                     <h:outputText value="#{midia.nomeMidia}" />
@@ -57,9 +52,10 @@ and open the template in the editor.
                     <h:outputText value=" R$ - #{midia.valorMidia}" />
                 </p:column>
                 <p:column headerText="Comprar" style="width:20%" >    
-                    <p:link outcome="ComprarMidia" value="COMPRA">
+                    <p:link outcome="ComprarMidia" value="COMPRA" >
                         <f:param name="codMidia" value="#{midia.codMidia}" />
-                    </p:link>   
+                    </p:link>
+                    
                 </p:column>
                 <p:column headerText="Imagem" style="width:10%">
                     <img src="images/#{midia.codMidia}.jpg" alt="" width="100%" height="70px" />

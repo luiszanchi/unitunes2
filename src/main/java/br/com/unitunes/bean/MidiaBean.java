@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.com.unitunes.bean;
 
 import br.com.unitunes.entity.Midia;
@@ -12,7 +8,6 @@ import br.com.unitunes.service.GerenciarMidiaService;
 import br.com.unitunes.service.GerenciarUsuariosService;
 import br.com.unitunes.session.SessionContext;
 import br.com.unitunes.session.User;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileDescriptor;
@@ -20,8 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -114,8 +107,6 @@ public class MidiaBean  implements Serializable{
          media = new DefaultStreamedContent(stream, "audio/mpeg") ;
          
      }
-    
-    
     private StreamedContent media;
     
     
@@ -133,9 +124,7 @@ public class MidiaBean  implements Serializable{
         midia = new Midia();
         midiaGerencia = new Midia();
         
-        midiasUsuario = this.gerenciarMidiaService.buscarMidiasUsuario(user.getCodUsuario());
-        
-       
+        midiasUsuario = this.gerenciarMidiaService.buscarMidiasUsuario(user.getCodUsuario());        
     }
     
     public void atualizar(){
@@ -218,42 +207,68 @@ public class MidiaBean  implements Serializable{
     
      public void CarregaConteudo(FileUploadEvent event) {
          
-         //TODO
-         if (event.getFile().getFileName().contains("pdf")|| event.getFile().getFileName().contains("PDF") || 
-                event.getFile().getFileName().contains("TXT")|| event.getFile().getFileName().contains("txt")||
-                    event.getFile().getFileName().contains("MP3")|| event.getFile().getFileName().contains("mp3") ||
-                        event.getFile().getFileName().contains("MP4")|| event.getFile().getFileName().contains("mp4") ||
-                            event.getFile().getFileName().contains("AVI")|| event.getFile().getFileName().contains("avi")){
-            conteudo = event.getFile();
-        }else{
-             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Midia Invalida"));
+        if (tipo != null && tipo.equalsIgnoreCase("L")){
+            if(event.getFile().getFileName().contains("pdf")|| event.getFile().getFileName().contains("PDF")){
+                conteudo = event.getFile();
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Midia Invalida - Importe PDF"));
+            }
+              
+        }else if (tipo != null && tipo.equalsIgnoreCase("P")){
+            if(event.getFile().getFileName().contains("MP3")|| event.getFile().getFileName().contains("mp3")){
+                conteudo = event.getFile();
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Midia Invalida - Importe Mp3"));
+            }
+              
         }
+        else if (tipo != null && tipo.equalsIgnoreCase("M")){
+            if( event.getFile().getFileName().contains("MP3")|| event.getFile().getFileName().contains("mp3")){
+                conteudo = event.getFile();
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Midia Invalida - Importe Mp3"));
+            }
+                   
+        }else if (tipo != null && tipo.equalsIgnoreCase("V")){
+            if(event.getFile().getFileName().contains("MP4")|| event.getFile().getFileName().contains("mp4")){
+                conteudo = event.getFile();
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Midia Invalida - Importe Mp4"));
+            }
+        }
+            
         
     }
     
     public void proximaEtapa(){
+        
+        
         
         if (midia.getTipoMidia().equalsIgnoreCase("L")){
                isLivro = true;
                isPodcast = false;
                isMusica = false;
                isVideo = false;
+               tipo = midia.getTipoMidia();
         }else if (midia.getTipoMidia().equalsIgnoreCase("P")){
                isLivro = false;
                isPodcast= true;
                isMusica= false;
                isVideo= false;
+               tipo = midia.getTipoMidia();
         }
         else if (midia.getTipoMidia().equalsIgnoreCase("M")){
                isLivro = false;
                isPodcast= false;
                isMusica= true;
                isVideo= false;
+               tipo = midia.getTipoMidia();
         }else if (midia.getTipoMidia().equalsIgnoreCase("V")){
                isLivro = false;
                isPodcast= false;
                isMusica= false;
                isVideo= true;
+               tipo = midia.getTipoMidia();
         }else{
                isLivro = false;
                isPodcast= false;
@@ -307,13 +322,6 @@ public class MidiaBean  implements Serializable{
         return midiasPorTipo;
     }
     
-    
-    public String pegaConteudo(){
-    midiaGerencia.getConteudoMidia();
-    
- 
-        return null ;
-    }
     
     public String labelConteudo(){
         if (conteudo != null){
@@ -412,6 +420,7 @@ public class MidiaBean  implements Serializable{
     }
 
     public void setTipo(String tipo) {
+        midia.setTipoMidia(tipo);
         this.tipo = tipo;
     }
     
@@ -460,19 +469,5 @@ public class MidiaBean  implements Serializable{
     public void setIsPodcast(boolean isPodcast) {
         this.isPodcast = isPodcast;
     } 
-    
-   /* 
-    byte[] imgBytes = rs.getBytes("binaryfile");
-try{
-    FileOutputStream fos = new FileOutputStream("C:/imagens/"+ imagem.getFileName());
-     fos.write(imgBytes);
-     FileDescriptor fd = fos.getFD();
-     fos.flush();
-     fd.sync();
-     fos.close(); 
- }
- catch(Exception e){
-    String erro = e.toString();
-}*/
    
 }

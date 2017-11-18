@@ -12,6 +12,7 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import br.com.unitunes.service.GerenciarMidiaService;
 import br.com.unitunes.service.GerenciarCompraService;
+import br.com.unitunes.session.Config;
 import br.com.unitunes.session.SessionContext;
 import br.com.unitunes.session.User;
 import java.io.File;
@@ -60,6 +61,7 @@ public class compraBean  implements Serializable{
     private String tipo = "";
     private Midia midiaCompraConfirma;
     private Long codigoMidiaCompra;
+    private Config config;
 
     public Long getCodigoMidiaCompra() {
         return codigoMidiaCompra;
@@ -72,11 +74,13 @@ public class compraBean  implements Serializable{
                 midiaCompraConfirma = midia;
             }
         }
-         String enderecoFoto = "D:\\MINHAS COISAS\\unisinos\\TrabalhoArquiteturaSoftware\\unitunes2\\src\\main\\webapp\\images\\foto.jpg";
+        if(config == null || (config != null && config.getCaminhoFoto() == null) || (config != null && config.getCaminoBase() == null)){
+                config = (Config) SessionContext.getInstance().getAttribute("config");
+        }
          
-         FileOutputStream fos;
+        FileOutputStream fos;
         try {
-            fos = new FileOutputStream(enderecoFoto);
+            fos = new FileOutputStream(config.getCaminhoFoto()+"foto.jpg");
             fos.write(midiaCompraConfirma.getImagem());
             FileDescriptor fd = fos.getFD();
             fos.flush();
@@ -88,11 +92,9 @@ public class compraBean  implements Serializable{
             Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        String enderecoMusica = "D:\\MINHAS COISAS\\unisinos\\TrabalhoArquiteturaSoftware\\unitunes2\\src\\main\\webapp\\musica.mp3";
          
         try {
-            fos = new FileOutputStream(enderecoMusica);
+            fos = new FileOutputStream(config.getCaminoBase()+"musica.mp3");
             fos.write(midiaCompraConfirma.getConteudoMidia());
             FileDescriptor fd = fos.getFD();
             fos.flush();
@@ -156,12 +158,16 @@ public class compraBean  implements Serializable{
         }
         midiasUsuario = this.gerenciarMidiaService.buscarMidiasComprav2(user.getCodUsuario());
        
-        String enderecoFoto = "D:\\MINHAS COISAS\\unisinos\\TrabalhoArquiteturaSoftware\\unitunes2\\src\\main\\webapp\\images\\";
+        
+        if(config == null || (config != null && config.getCaminhoFoto() == null) || (config != null && config.getCaminoBase() == null)){
+                config = (Config) SessionContext.getInstance().getAttribute("config");
+        }
+        
         FileOutputStream fos;
         for (Midia midia : midiasUsuario) {
             
             try {
-                fos = new FileOutputStream(enderecoFoto+midia.getCodMidia().toString()+".jpg");
+                fos = new FileOutputStream(config.getCaminoBase()+midia.getCodMidia().toString()+".jpg");
                 fos.write(midia.getImagem());
                 FileDescriptor fd = fos.getFD();
                 fos.flush();
