@@ -1,0 +1,31 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 19/11/2017, 23:09:50
+    Author     : LuisFernandoTorriani
+*/
+
+                    /* Could Use thise as well for Individual Controls */
+video::-webkit-media-controls-play-button { display: hidden}
+
+video::-webkit-media-controls-volume-slider { display: hidden}
+
+video::-webkit-media-controls-mute-button { display: hidden}
+
+video::-webkit-media-controls-timeline { display: hidden}
+
+video::-webkit-media-controls-current-time-display { display: hidden}
+video::-internal-media-controls-download-button {
+    display:none;
+}
+
+video::-webkit-media-controls-enclosure {
+    overflow:hidden;
+}
+
+video::-webkit-media-controls-panel {
+    width: calc(100% + 30px); /* Adjust as needed */
+}

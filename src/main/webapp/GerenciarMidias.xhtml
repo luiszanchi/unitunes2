@@ -9,19 +9,78 @@ and open the template in the editor.
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
     <ui:composition template="template.xhtml">
         <ui:define name="conteudo">
             <link href="css/primefaces/inputswitch.css" rel="stylesheet" type="text/css" media="all" />
-            <center>
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+
+            <c:if test="#{GerenciarMidia.isMusicaGerencia}">
+                <script type="text/javascript" src="js/jplayer/jquery.jplayer.min.js"></script>
+                <script type="text/javascript" src="js/jplayer/player.js"></script>
+
+                <link rel="stylesheet" href="css/jPlayer/player.css"/>
+                <center>
+                    <div id="player_custom" class="player_custom">
+                        <div id="jquery_jplayer_1" class="jp-jplayer"></div>
+
+                        <div id="jp_container_1">
+                            <div class="jp-gui ui-widget ui-widget-content ui-corner-all">
+                                <ul>
+                                    <li class="jp-play ui-state-default ui-corner-all"><a href="javascript:;" class="jp-play ui-icon ui-icon-play" tabindex="1" title="play">play</a></li>
+                                    <li class="jp-pause ui-state-default ui-corner-all"><a href="javascript:;" class="jp-pause ui-icon ui-icon-pause" tabindex="1" title="pause">pause</a></li>
+                                    <li class="jp-stop ui-state-default ui-corner-all"><a href="javascript:;" class="jp-stop ui-icon ui-icon-stop" tabindex="1" title="stop">stop</a></li>
+                                    <li class="jp-repeat ui-state-default ui-corner-all"><a href="javascript:;" class="jp-repeat ui-icon ui-icon-refresh" tabindex="1" title="repeat">repeat</a></li>
+                                    <li class="jp-repeat-off ui-state-default ui-state-active ui-corner-all"><a href="javascript:;" class="jp-repeat-off ui-icon ui-icon-refresh" tabindex="1" title="repeat off">repeat off</a></li>
+                                    <li class="jp-mute ui-state-default ui-corner-all"><a href="javascript:;" class="jp-mute ui-icon ui-icon-volume-off" tabindex="1" title="mute">mute</a></li>
+                                    <li class="jp-unmute ui-state-default ui-state-active ui-corner-all"><a href="javascript:;" class="jp-unmute ui-icon ui-icon-volume-off" tabindex="1" title="unmute">unmute</a></li>
+                                    <!--<li class="jp-volume-max ui-state-default ui-corner-all"><a href="javascript:;" class="jp-volume-max ui-icon ui-icon-volume-on" tabindex="1" title="max volume">max volume</a></li>-->
+                                </ul>
+                                <div class="jp-progress-slider"></div>
+                                <div class="jp-volume-slider"></div>
+                                <div class="jp-current-time"></div>
+                                <div class="jp-duration"></div>
+                                <div class="jp-clearboth"></div>
+                            </div>
+                            <div class="jp-no-solution">
+                                <span>Update Required</span>
+                                To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+                            </div>
+                        </div>
+                    </div>
+                </center>
+            </c:if>
+            <c:if test="#{GerenciarMidia.isVideoGerencia}">
+                <link rel="stylesheet" href="css/videoPlayer/videoPlayer.css"/>
                 
+                <center>
+                    <div id="player">
+                        <div style="width: 700px; height: 20px; top: 7px; position: relative; padding: 1em 0;">
+                            <button onclick="playPause()">Play/Pause</button> 
+                            <button onclick="stop()">Stop</button>
+                            <button onclick="mute()">Mute</button>
+                            <input style="width: 100px; display: initial; " id="vol-control" type="range" min="0" max="100" step="1" oninput="SetVolume(this.value)" onchange="SetVolume(this.value)"/>
+                            <button onclick="fullscreen()">FullScreen</button>
+                        </div>
+                        <br/><br/>
+                        <video id="video">
+                            <source id="video_source" src="" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'/>
+                        </video>
+
+                    </div>
+                </center>
+                <script type="text/javascript" src="js/videoPlayer/videoPlayer.js"></script>
+            </c:if>
+            <center>
+
                 <h:form id="form">
-                        <tbody>
-                            
-                            <tr>
-                                <td><h:outputText value="Tipo de Midia" style="font-weight: bold"  /></td>
-                                    
-                                <div>
+                    <tbody>
+
+                        <tr>
+                            <td><h:outputText value="Tipo de Midia" style="font-weight: bold"  /></td>
+
+                            <div>
                                 <td>
                                     <p:selectOneMenu value="#{GerenciarMidia.tipo}" style="width:180px;" >
                                         <p:ajax update="@this" />
@@ -32,62 +91,73 @@ and open the template in the editor.
                                         <f:selectItem itemLabel="Musica" itemValue="M"/>
                                     </p:selectOneMenu>
                                 </td>
-                                    </div>
-                                <div>
+                            </div>
+                            <div>
                                 <td><p:commandButton value="Selecionar" action="#{GerenciarMidia.selecionarMidias()}"  oncomplete="submit()" style=" margin-bottom:50px;margin-top: 10px" /></td>
                                 <td><p:commandButton value="Atualizar" action="#{GerenciarMidia.atualizar()}"  oncomplete="submit()" style=" margin-bottom:50px;margin-top: 10px" /></td>
-                                </div>
-                            </tr>
-                        </tbody>
-                 </h:form>             
-                            
-                
-            <p:growl id="msgs" showDetail="true" />
-            <p:dataTable  id="output" var="midia" value="#{GerenciarMidia.selecionarMidias()}">
-                <p:column headerText="Cod" style="width:10%">
-                    <h:outputText value="#{midia.codMidia}" />
-                </p:column>
-                <p:column headerText="Nome" style="width:25%">
-                    <h:outputText value="#{midia.nomeMidia}" />
-                </p:column>
-                <p:column headerText="Descrição" style="width:30%">
-                    <h:outputText value="#{midia.descricao}" />
-                </p:column>
-                <p:column headerText="Valor" style="width:8%">
-                    <h:outputText value=" R$ - #{midia.valorMidia}" />
-                </p:column>
-                <p:column headerText="Midia" style="width:20%" >    
-                     <h:form>
-                         <p:commandButton value="Play"  ajax="true"  update="player" actionListener="#{GerenciarMidia.carregarMidia(midia)}" onclick="PF('dlg1').show();" rendered="#{GerenciarMidia.isMusicaGerencia or GerenciarMidia.isPodcast}"/>
-                         <p:commandButton value="PlayVideo"  ajax="true"  update="playervideo" actionListener="#{GerenciarMidia.carregarMidia(midia)}" onclick="PF('dlg1').show();" rendered="#{GerenciarMidia.isVideoGerencia}"/>
-                       <p:commandButton value="Alterar"  actionListener="#{GerenciarMidia.carregarMidia(midia)}"/>
-                    </h:form>
-                </p:column>
-                <p:column headerText="Imagem" style="width:10%">
-                    <img src="images/22.jpg" alt="" width="100%" height="70px" />
-                </p:column>
-            </p:dataTable>
-            
-            <p:dialog header="Player" widgetVar="dlg1" minHeight="40" id="dialog" rendered="#{GerenciarMidia.isMusicaGerencia or GerenciarMidia.isPodcast}" showEffect="explode"  >
-                      <p:outputPanel id="player" style="text-align:center;">
-                      <div>
-                        <h:outputText value="#{GerenciarMidia.midiaGerencia.nomeMidia}" />
-                      </div>
-                      <audio controls="controls" controlsList="nodownload" >
-                          <source src="Avivamento.mp3" type="audio/mpeg " />
-                      </audio>
-                         
+                            </div>
+                        </tr>
+                    </tbody>
+                </h:form>             
+
+
+                <p:growl id="msgs" showDetail="true" />
+                <p:dataTable  id="output" var="midia" value="#{GerenciarMidia.selecionarMidias()}">
+                    <p:column headerText="Cod" style="width:10%">
+                        <h:outputText value="#{midia.codMidia}" />
+                    </p:column>
+                    <p:column headerText="Nome" style="width:25%">
+                        <h:outputText value="#{midia.nomeMidia}" />
+                    </p:column>
+                    <p:column headerText="Descrição" style="width:30%">
+                        <h:outputText value="#{midia.descricao}" />
+                    </p:column>
+                    <p:column headerText="Valor" style="width:8%">
+                        <h:outputText value=" R$ - #{midia.valorMidia}" />
+                    </p:column>
+                    <p:column headerText="Midia" style="width:20%" >    
+                        <c:if test="#{GerenciarMidia.isMusicaGerencia}">
+                            <button id="myPlayButton" onclick="c('#{GerenciarMidia.carregaMusica(midia)}')" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
+                                <span class="ui-button-text ui-c">PLAY</span>
+                            </button>
+                        </c:if>
+                        <c:if test="#{GerenciarMidia.isVideoGerencia}">
+                            <button id="myPlayButton" onclick="changeVideo('#{GerenciarMidia.carregaVideo(midia)}')" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
+                                <span class="ui-button-text ui-c">PLAY VIDEO</span>
+                            </button>
+                        </c:if>
+                        <c:if test="2==1">
+                            <!--<p:commandButton value="PlayVideo"  ajax="true"  update="playervideo" actionListener="#{GerenciarMidia.carregarMidia(midia)}" onclick="PF('dlg1').show();" rendered="#{GerenciarMidia.isVideoGerencia}"/>-->
+                        </c:if>
+                        <h:form>    
+                            <p:commandButton value="Alterar"  actionListener="#{GerenciarMidia.carregarMidia(midia)}"/>
+                        </h:form>
+                    </p:column>
+                    <p:column headerText="Imagem" style="width:10%">
+                        <img src="images/22.jpg" alt="" width="100%" height="70px" />
+                    </p:column>
+                </p:dataTable>
+
+                <p:dialog header="Player" widgetVar="dlg1" minHeight="40" id="dialog" rendered="#{GerenciarMidia.isMusicaGerencia or GerenciarMidia.isPodcast}" showEffect="explode"  >
+                    <p:outputPanel id="player" style="text-align:center;">
+                        <div>
+                            <h:outputText value="#{GerenciarMidia.midiaGerencia.nomeMidia}" />
+                        </div>
+                        <audio controls="controls" controlsList="nodownload" >
+                            <source src="Avivamento.mp3" type="audio/mpeg " />
+                        </audio>
+
                     </p:outputPanel>
                 </p:dialog>
-            
-            
-            <p:dialog header="Player" widgetVar="dlg1" minHeight="40" rendered="#{GerenciarMidia.isVideoGerencia}" showEffect="explode" minimizable="true" >
+
+
+                <p:dialog header="Player" widgetVar="dlg1" minHeight="40" rendered="#{GerenciarMidia.isVideoGerencia}" showEffect="explode" minimizable="true" >
                     <p:outputPanel id="playervideo" style="text-align:center;">
                         <div>
                             <h:outputText value="#{GerenciarMidia.midiaGerencia.nomeMidia}" />
                         </div>
                         <video width="320" height="240" controls="controls" controlsList="nodownload">
-                                <source src="teste.mp4" type="video/mp4"/>
+                            <source src="teste.mp4" type="video/mp4"/>
                         </video> 
                     </p:outputPanel>
                 </p:dialog>

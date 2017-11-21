@@ -8,6 +8,7 @@ import br.com.unitunes.service.GerenciarMidiaService;
 import br.com.unitunes.service.GerenciarUsuariosService;
 import br.com.unitunes.session.SessionContext;
 import br.com.unitunes.session.User;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileDescriptor;
@@ -15,6 +16,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -62,15 +70,80 @@ public class MidiaBean  implements Serializable{
     }
     User user;
     String tipo = "";
+    
+    public String carregaVideo(Midia midia){
+        Date data = new Date();
+        String nome = midia.getNomeMidia() + ".mp4";
+        String caminho = "tmp/" + nome;
+        String caminho_criar = "src/main/webapp/" + caminho;
+        System.out.println(caminho + " - " + caminho_criar);
+        try {
+            createFile(nome, midia.getConteudoMidia());
 
-    public boolean carregarMidia(Midia midiaAtual){
-         this.midiaGerencia.setNomeMidia(midiaAtual.getNomeMidia());
-         this.midiaGerencia.setConteudoMidia(midiaAtual.getConteudoMidia());
-         
-         //TODO
-         //javaUser = System.getProperty("user.home");
-         javaUser = "D:\\MINHAS COISAS\\unisinos\\TrabalhoArquiteturaSoftware\\unitunes2\\src\\main\\webapp\\musica.mp3";
-         File arq = new File("C:\\musica.mp3");
+            return caminho;
+        } catch (Exception ex) {
+            Logger.getLogger(Midia.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
+    public String carregaMusica(Midia midia) {
+
+        Date data = new Date();
+        String nome = midia.getNomeMidia() + ".mp3";
+        String caminho = "tmp/" + nome;
+        String caminho_criar = "src/main/webapp/" + caminho;
+        System.out.println(caminho + " - " + caminho_criar);
+        try {
+            createFile(nome, midia.getConteudoMidia());
+
+            return caminho;
+        } catch (Exception ex) {
+            Logger.getLogger(Midia.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    private static void createFile(String filename, byte[] conteudo) /* No, it doesn't. The only calls you had outside your catch-all `try` don't throw exceptions. */ {
+        //ErrorCheck ec           = new ErrorCheck();            // Recommend not creating this until/unless you need it
+        String fileName = "C:\\Users\\LuisFernandoTorriani\\Documents\\unitunes2-master\\src\\main\\webapp\\tmp\\" + filename; // VERY poor practice having two locals that only differ by the capitalization of one character in the middle (`filename` and `fileName`)
+        Path filePath = Paths.get(fileName);
+        //  File file               = new File(fileName);      <== Removed, since you never use it for anything
+
+        try {
+            File f = new File(fileName);
+            if (!f.exists()) {
+                // Make sure the directories exist
+                Files.createDirectories(filePath.getParent());  // No need for your null check, so I removed it; based on `fileName`, it will always have a parent
+
+                // Open the file, creating it if it doesn't exist
+                BufferedWriter out = Files.newBufferedWriter(
+                        filePath,
+                        StandardCharsets.UTF_8,
+                        StandardOpenOption.CREATE,
+                        StandardOpenOption.APPEND);
+                out.close();
+
+                Files.write(Paths.get(fileName), conteudo);
+                // do something
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Using the try-with-resources, we don't have to worry about the flush and close calls
+    }
+
+    public boolean carregarMidia(Midia midiaAtual) {
+        this.midiaGerencia.setNomeMidia(midiaAtual.getNomeMidia());
+        this.midiaGerencia.setConteudoMidia(midiaAtual.getConteudoMidia());
+
+        //TODO
+        //javaUser = System.getProperty("user.home");
+        javaUser = "D:\\MINHAS COISAS\\unisinos\\TrabalhoArquiteturaSoftware\\unitunes2\\src\\main\\webapp\\musica.mp3";
+        File arq = new File("C:\\musica.mp3");
 
          FileOutputStream fos;
         try {
