@@ -15,7 +15,6 @@ import br.com.unitunes.service.GerenciarCompraService;
 import br.com.unitunes.session.Config;
 import br.com.unitunes.session.SessionContext;
 import br.com.unitunes.session.User;
-import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,30 +25,14 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
-
-
-
-
-/**
- *
- * @author Tito Kern
- */
 
 @ManagedBean(name = "CompraMidia", eager = true)
-@SessionScoped
+@ViewScoped
 public class compraBean  implements Serializable{
 
-    public String getTipo() {
-        return tipo;
-    }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
     private List<Midia> midiasUsuario;
     private GerenciarMidiaService gerenciarMidiaService;
     private GerenciarCompraService gerenciarCompraService;
@@ -167,7 +150,7 @@ public class compraBean  implements Serializable{
         for (Midia midia : midiasUsuario) {
             
             try {
-                fos = new FileOutputStream(config.getCaminoBase()+midia.getCodMidia().toString()+".jpg");
+                fos = new FileOutputStream(config.getCaminhoFoto()+midia.getCodMidia().toString()+".jpg");
                 fos.write(midia.getImagem());
                 FileDescriptor fd = fos.getFD();
                 fos.flush();
@@ -244,6 +227,14 @@ public class compraBean  implements Serializable{
    
     public void setMidias(List<Midia> midias) {
         this.midiasUsuario = midias;
+    }
+    
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
    
 }

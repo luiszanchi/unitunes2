@@ -2,6 +2,7 @@
 package br.com.unitunes.entity;
 
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "configuracao")
-public class Configuracao {
+public class Configuracao implements Serializable {
 
     @Id
     @GeneratedValue

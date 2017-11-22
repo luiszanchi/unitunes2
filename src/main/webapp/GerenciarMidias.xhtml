@@ -102,65 +102,38 @@ and open the template in the editor.
 
 
                 <p:growl id="msgs" showDetail="true" />
-                <p:dataTable  id="output" var="midia" value="#{GerenciarMidia.selecionarMidias()}">
+                <p:dataTable  id="output" var="midiadto" value="#{GerenciarMidia.selecionarMidias()}">
                     <p:column headerText="Cod" style="width:10%">
-                        <h:outputText value="#{midia.codMidia}" />
+                        <h:outputText value="#{midiadto.mid.codMidia}" />
                     </p:column>
                     <p:column headerText="Nome" style="width:25%">
-                        <h:outputText value="#{midia.nomeMidia}" />
+                        <h:outputText value="#{midiadto.mid.nomeMidia}" />
                     </p:column>
                     <p:column headerText="Descrição" style="width:30%">
-                        <h:outputText value="#{midia.descricao}" />
+                        <h:outputText value="#{midiadto.mid.descricao}" />
                     </p:column>
                     <p:column headerText="Valor" style="width:8%">
-                        <h:outputText value=" R$ - #{midia.valorMidia}" />
+                        <h:outputText value=" R$ - #{midiadto.mid.valorMidia }" />
                     </p:column>
                     <p:column headerText="Midia" style="width:20%" >    
                         <c:if test="#{GerenciarMidia.isMusicaGerencia}">
-                            <button id="myPlayButton" onclick="c('#{GerenciarMidia.carregaMusica(midia)}')" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
+                            <button id="myPlayButton" onclick="c('#{GerenciarMidia.carregaMusica(midiadto.mid)}')" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
                                 <span class="ui-button-text ui-c">PLAY</span>
                             </button>
                         </c:if>
                         <c:if test="#{GerenciarMidia.isVideoGerencia}">
-                            <button id="myPlayButton" onclick="changeVideo('#{GerenciarMidia.carregaVideo(midia)}')" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
+                            <button id="myPlayButton" onclick="changeVideo('#{GerenciarMidia.carregaVideo(midiadto.mid)}')" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
                                 <span class="ui-button-text ui-c">PLAY VIDEO</span>
                             </button>
                         </c:if>
-                        <c:if test="2==1">
-                            <!--<p:commandButton value="PlayVideo"  ajax="true"  update="playervideo" actionListener="#{GerenciarMidia.carregarMidia(midia)}" onclick="PF('dlg1').show();" rendered="#{GerenciarMidia.isVideoGerencia}"/>-->
-                        </c:if>
                         <h:form>    
-                            <p:commandButton value="Alterar"  actionListener="#{GerenciarMidia.carregarMidia(midia)}"/>
+                            <p:commandButton value="Alterar"  actionListener="#{GerenciarMidia.carregarMidia(midiadto.mid)}" rendered="#{!midiadto.isCompra}"/>
                         </h:form>
                     </p:column>
                     <p:column headerText="Imagem" style="width:10%">
-                        <img src="images/22.jpg" alt="" width="100%" height="70px" />
+                        <img src="images/#{midiadto.mid.codMidia}.jpg" alt="" width="100%" height="70px" />
                     </p:column>
                 </p:dataTable>
-
-                <p:dialog header="Player" widgetVar="dlg1" minHeight="40" id="dialog" rendered="#{GerenciarMidia.isMusicaGerencia or GerenciarMidia.isPodcast}" showEffect="explode"  >
-                    <p:outputPanel id="player" style="text-align:center;">
-                        <div>
-                            <h:outputText value="#{GerenciarMidia.midiaGerencia.nomeMidia}" />
-                        </div>
-                        <audio controls="controls" controlsList="nodownload" >
-                            <source src="Avivamento.mp3" type="audio/mpeg " />
-                        </audio>
-
-                    </p:outputPanel>
-                </p:dialog>
-
-
-                <p:dialog header="Player" widgetVar="dlg1" minHeight="40" rendered="#{GerenciarMidia.isVideoGerencia}" showEffect="explode" minimizable="true" >
-                    <p:outputPanel id="playervideo" style="text-align:center;">
-                        <div>
-                            <h:outputText value="#{GerenciarMidia.midiaGerencia.nomeMidia}" />
-                        </div>
-                        <video width="320" height="240" controls="controls" controlsList="nodownload">
-                            <source src="teste.mp4" type="video/mp4"/>
-                        </video> 
-                    </p:outputPanel>
-                </p:dialog>
             </center>
         </ui:define>        
     </ui:composition>

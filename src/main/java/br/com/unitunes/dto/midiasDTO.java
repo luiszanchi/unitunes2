@@ -1,14 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.com.unitunes.dto;
 
-/**
- *
- * @author Tito-Casa
- */
-public class midiasDTO {
+import br.com.unitunes.entity.Midia;
+import java.io.Serializable;
+
+public class midiasDTO implements Serializable{
+    Midia mid;
+    Boolean isCompra;
+
+    public Midia getMid() {
+        return mid;
+    }
+
+    public void setMid(Midia mid) {
+        this.mid = mid;
+    }
+
+    public Boolean getIsCompra() {
+        return isCompra;
+    }
+
+    public void setIsCompra(Boolean isCompra) {
+        this.isCompra = isCompra;
+    }
+    
     
 }

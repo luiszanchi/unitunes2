@@ -1,18 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.com.unitunes.session;
 
 import br.com.unitunes.dao.UsuarioDao;
 import br.com.unitunes.entity.Usuario;
+import java.io.Serializable;
 
-/**
- *
- * @author LuisFernandoTorriani
- */
-public class UserLogin {
+
+public class UserLogin implements Serializable{
 
     private String user;
 
@@ -62,20 +56,36 @@ public class UserLogin {
                 user.setNomeUsuario(u.getNomeUsuario());
                 user.setTipoUsuario(u.getTipoUsuario());
             }else{
-                user.setCodUsuario(u.getCodUsuario().toString());
-                user.setEmailUsuario(u.getEmail());
-                user.setNomeUsuario(u.getNomeUsuario());
-                user.setTipoUsuario(u.getTipoUsuario());
+                if (u.getCodUsuario() != null){
+                    user.setCodUsuario(u.getCodUsuario().toString());
+                }
+                if (u.getEmail() != null){
+                    user.setEmailUsuario(u.getEmail());
+                }
+                if (u.getNomeUsuario() != null){
+                    user.setNomeUsuario(u.getNomeUsuario());
+                }
+                if (u.getTipoUsuario() != null){
+                    user.setTipoUsuario(u.getTipoUsuario());
+                }    
             }
         } else {
             u = ud.getQueryList("from Usuario u where u.email = '" + l + "' and u.senha = '" + s + "'").get(0);
             if (u == null) {
                 return null;
             } else {
-                user.setCodUsuario(u.getCodUsuario().toString());
-                user.setEmailUsuario(u.getEmail());
-                user.setNomeUsuario(u.getNomeUsuario());
-                user.setTipoUsuario(u.getTipoUsuario());
+                 if (u.getCodUsuario() != null){
+                    user.setCodUsuario(u.getCodUsuario().toString());
+                }
+                if (u.getEmail() != null){
+                    user.setEmailUsuario(u.getEmail());
+                }
+                if (u.getNomeUsuario() != null){
+                    user.setNomeUsuario(u.getNomeUsuario());
+                }
+                if (u.getTipoUsuario() != null){
+                    user.setTipoUsuario(u.getTipoUsuario());
+                } 
             }
         }
 

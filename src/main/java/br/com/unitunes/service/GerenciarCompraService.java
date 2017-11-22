@@ -1,24 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.com.unitunes.service;
 
 import br.com.unitunes.dao.compraMidiaDao;
 import br.com.unitunes.entity.Compra;
+import java.io.Serializable;
 import java.util.List;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
-/**
- *
- * @author Tito-Casa
- */
 
 @ManagedBean(name = "compraService")
 @ApplicationScoped
-public class GerenciarCompraService {
+public class GerenciarCompraService implements Serializable{
     private compraMidiaDao ud;
     public List<Compra> Compras(){
         if (ud == null){
@@ -59,5 +52,6 @@ public class GerenciarCompraService {
         }
         return ud.getQueryList("");
     }
+        
     
 }

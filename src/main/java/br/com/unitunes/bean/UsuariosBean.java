@@ -1,25 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.com.unitunes.bean;
 
-import br.com.unitunes.dao.UsuarioDao;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import br.com.unitunes.entity.Usuario;
 import br.com.unitunes.service.GerenciarUsuariosService;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.SessionScoped;
 
-/**
- *
- * @author LuisFernandoTorriani
- */
+
 @ManagedBean(name = "usuariosGerenciar")
 @SessionScoped
 public class UsuariosBean implements Serializable{

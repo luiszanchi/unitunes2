@@ -7,9 +7,13 @@ and open the template in the editor.
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:body>
-        <ui:composition> <div class="logo_products">
+        <p:growl id="messages" showDetail="true" />
+        <form>
+            <div class="logo_products">
                 <div class="container">
                <div class="w3ls_logo_products_left">
                         <img src="" alt="" />
@@ -19,19 +23,17 @@ and open the template in the editor.
                         <img src="images/unisinos.png" alt="" />
                         <h1><a href="index.xhtml">UniTunes</a></h1>
                     </div>               
-                    <div class="w3l_search">
-                        <form action="#" method="post">
-                            <input type="search" name="Search"   placeholder="Procure uma midia" required=""/>
-                            <button type="submit" class="btn btn-default search"  aria-label="Left Align">
-                                <i class="fa fa-search" aria-hidden="true"> </i>
-                            </button>
-                            <div class="clearfix"></div>
-                        </form>
-                    </div>
-
-                    <div class="clearfix"> </div>
+                    <h:form>
+                        <i class="fa fa-search" aria-hidden="false" style="margin-right: 10px;x"> </i>
+                    <h:inputText styleClass="myText" value="#{usuarioLogadoMB.pesquisa}"/>
+                    <h:commandButton    type="submit" action="#{usuarioLogadoMB.pesquisa()}"  value="Procurar" styleClass="btn btn-default">
+                        <span class="Procurar" style="margin-left: 400px"></span>
+                    </h:commandButton>
+                    
+                    </h:form>
                 </div>
-            </div>
-        </ui:composition>
+            </div>     
+            </form>
     </h:body>
 </html>
+

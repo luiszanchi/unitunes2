@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.com.unitunes.session;
 
-/**
- *
- * @author LuisFernandoTorriani
- */
-public class User {
+import java.io.Serializable;
+
+
+public class User implements Serializable {
     private String codUsuario;
     
     private String nomeUsuario;

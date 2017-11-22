@@ -1,18 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.com.unitunes.session;
 
-/**
- *
- * @author LuisFernandoTorriani
- */
-
-    import javax.faces.context.ExternalContext;
+  import javax.faces.context.ExternalContext;
   import javax.faces.context.FacesContext;
-  import javax.servlet.http.HttpSession;
    
    
   public class SessionContext {

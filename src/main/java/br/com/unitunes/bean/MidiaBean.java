@@ -1,23 +1,23 @@
 
 package br.com.unitunes.bean;
 
+import br.com.unitunes.dto.midiasDTO;
 import br.com.unitunes.entity.Midia;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import br.com.unitunes.service.GerenciarMidiaService;
 import br.com.unitunes.service.GerenciarUsuariosService;
+import br.com.unitunes.session.Config;
+import br.com.unitunes.session.Pesquisa;
 import br.com.unitunes.session.SessionContext;
+import br.com.unitunes.session.SessionMidia;
 import br.com.unitunes.session.User;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,27 +30,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 
-
-/**
- *
- * @author Tito Kern
- */
-
 @ManagedBean(name = "GerenciarMidia", eager = true)
-@SessionScoped
+@ViewScoped
 public class MidiaBean  implements Serializable{
     private List<Midia> midiasUsuario;
+    private List<Midia> midiasUsuarioCompra;
     private GerenciarMidiaService gerenciarMidiaService;
     private Midia midia = new Midia();
     private Midia midiaGerencia = new Midia();
+    private Midia midiaEditar = new Midia();
     private Midia Midiaplayer = new Midia();
     private boolean isLivro;
     private boolean isPodcast;
@@ -61,9 +55,12 @@ public class MidiaBean  implements Serializable{
     private boolean isPodcastGerencia;
     private boolean isMusicaGerencia;
     private boolean isVideoGerencia;
+    private boolean editavel = false;
     UploadedFile imagem;
     UploadedFile conteudo;
     String javaUser;
+    private Config config;
+    private Pesquisa pesquisa;
 
     public String getJavaUser() {
         return javaUser;
@@ -108,7 +105,8 @@ public class MidiaBean  implements Serializable{
 
     private static void createFile(String filename, byte[] conteudo) /* No, it doesn't. The only calls you had outside your catch-all `try` don't throw exceptions. */ {
         //ErrorCheck ec           = new ErrorCheck();            // Recommend not creating this until/unless you need it
-        String fileName = "C:\\Users\\LuisFernandoTorriani\\Documents\\unitunes2-master\\src\\main\\webapp\\tmp\\" + filename; // VERY poor practice having two locals that only differ by the capitalization of one character in the middle (`filename` and `fileName`)
+        
+        String fileName = ((Config) SessionContext.getInstance().getAttribute("config")).getCaminoBase()+"tmp\\"+filename; // VERY poor practice having two locals that only differ by the capitalization of one character in the middle (`filename` and `fileName`)
         Path filePath = Paths.get(fileName);
         //  File file               = new File(fileName);      <== Removed, since you never use it for anything
 
@@ -137,29 +135,12 @@ public class MidiaBean  implements Serializable{
     }
 
     public boolean carregarMidia(Midia midiaAtual) {
-        this.midiaGerencia.setNomeMidia(midiaAtual.getNomeMidia());
-        this.midiaGerencia.setConteudoMidia(midiaAtual.getConteudoMidia());
-
-        //TODO
-        //javaUser = System.getProperty("user.home");
-        javaUser = "D:\\MINHAS COISAS\\unisinos\\TrabalhoArquiteturaSoftware\\unitunes2\\src\\main\\webapp\\musica.mp3";
-        File arq = new File("C:\\musica.mp3");
-
-         FileOutputStream fos;
+    
+        SessionMidia sMidia = new SessionMidia();
+        sMidia.setMidia(midiaAtual);
+        SessionContext.getInstance().setAttribute("sessionmidia", sMidia);
         try {
-            fos = new FileOutputStream(javaUser);
-            fos.write(midiaGerencia.getConteudoMidia());
-            FileDescriptor fd = fos.getFD();
-            fos.flush();
-            fd.sync();
-            fos.close(); 
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("GerenciarMidias.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("EditarMidia.xhtml");
         } catch (IOException ex) {
             Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -167,28 +148,45 @@ public class MidiaBean  implements Serializable{
 
      }
 
-    public StreamedContent getMedia() {
-        return media;
-    }
-    
-     public void mediaControle(Midia midiaAtual){
-         
-         ByteArrayInputStream bis = new ByteArrayInputStream(midiaAtual.getConteudoMidia());
-         
-         InputStream stream = bis;
-         
-         media = new DefaultStreamedContent(stream, "audio/mpeg") ;
-         
-     }
-    private StreamedContent media;
-    
-    
-    
     @PostConstruct
     public void init(){
+        
+        if (((SessionMidia) SessionContext.getInstance().getAttribute("sessionmidia")) != null && ((SessionMidia) SessionContext.getInstance().getAttribute("sessionmidia")).getMidia() != null){
+            midiaEditar = ((SessionMidia) SessionContext.getInstance().getAttribute("sessionmidia")).getMidia();
+            SessionContext.getInstance().setAttribute("sessionmidia", null);
+        
+        if (midiaEditar.getTipoMidia().equalsIgnoreCase("L")){
+               isLivro = true;
+               isPodcast = false;
+               isMusica = false;
+               isVideo = false;
+        }else if (midiaEditar.getTipoMidia().equalsIgnoreCase("P")){
+               isLivro = false;
+               isPodcast= true;
+               isMusica= false;
+               isVideo= false;
+        }
+        else if (midiaEditar.getTipoMidia().equalsIgnoreCase("M")){
+               isLivro = false;
+               isPodcast= false;
+               isMusica= true;
+               isVideo= false;
+        }else if (midiaEditar.getTipoMidia().equalsIgnoreCase("V")){
+               isLivro = false;
+               isPodcast= false;
+               isMusica= false;
+               isVideo= true;
+        }
+        
+        this.editavel = true;
+        this.imagem = null;
+        this.conteudo = null;
+    }
+        
         if (this.gerenciarMidiaService == null){
             this.gerenciarMidiaService = new GerenciarMidiaService();
         }
+        
         if(user == null){        
              user = (User) SessionContext.getInstance().getAttribute("user");
         }
@@ -197,7 +195,62 @@ public class MidiaBean  implements Serializable{
         midia = new Midia();
         midiaGerencia = new Midia();
         
-        midiasUsuario = this.gerenciarMidiaService.buscarMidiasUsuario(user.getCodUsuario());        
+
+        if(pesquisa == null || (pesquisa != null && pesquisa.getPesquisa() == null)){
+            if (((Pesquisa) SessionContext.getInstance().getAttribute("pesquisa")) != null && ((Pesquisa) SessionContext.getInstance().getAttribute("pesquisa")).getPesquisa() != null ){
+                pesquisa = (Pesquisa) SessionContext.getInstance().getAttribute("pesquisa");
+            }      
+        }
+        
+        if(pesquisa != null && pesquisa.getPesquisa() != null && pesquisa.getPesquisa().length() > 1){
+            midiasUsuario = this.gerenciarMidiaService.buscarMidiasUsuarioPesquisa(user.getCodUsuario(), pesquisa.getPesquisa());
+            midiasUsuarioCompra = this.gerenciarMidiaService.buscarMidiasCompraPesquisa(user.getCodUsuario(), pesquisa.getPesquisa());
+            pesquisa = null;
+            SessionContext.getInstance().setAttribute("pesquisa", pesquisa);
+        }else{
+            midiasUsuarioCompra = this.gerenciarMidiaService.buscarMidiasCompra(user.getCodUsuario());
+            midiasUsuario = this.gerenciarMidiaService.buscarMidiasUsuario(user.getCodUsuario());    
+        }
+
+        if(config == null || (config != null && config.getCaminhoFoto() == null) || (config != null && config.getCaminoBase() == null)){
+                config = (Config) SessionContext.getInstance().getAttribute("config");
+        }
+        
+        //midiasUsuario
+        FileOutputStream fos;    
+        for (Midia midia : midiasUsuario) {
+            try {
+                fos = new FileOutputStream(config.getCaminhoFoto()+midia.getCodMidia().toString()+".jpg");
+                fos.write(midia.getImagem());
+                FileDescriptor fd = fos.getFD();
+                fos.flush();
+                fd.sync();
+                fos.close(); 
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        //midiasCompradas
+        for (Midia midia : midiasUsuarioCompra) {
+            FileOutputStream fosCompra;
+            try {
+                fosCompra = new FileOutputStream(config.getCaminhoFoto()+midia.getCodMidia().toString()+".jpg");
+                fosCompra.write(midia.getImagem());
+                FileDescriptor fd = fosCompra.getFD();
+                fosCompra.flush();
+                fd.sync();
+                fosCompra.close(); 
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        
     }
     
     public void atualizar(){
@@ -208,6 +261,29 @@ public class MidiaBean  implements Serializable{
              user = (User) SessionContext.getInstance().getAttribute("user");
         }        
         midiasUsuario = this.gerenciarMidiaService.buscarMidiasUsuario(user.getCodUsuario());
+        
+        
+         if(config == null || (config != null && config.getCaminhoFoto() == null) || (config != null && config.getCaminoBase() == null)){
+                config = (Config) SessionContext.getInstance().getAttribute("config");
+        }
+        
+        FileOutputStream fos;
+        for (Midia midia : midiasUsuario) {
+            
+            try {
+                fos = new FileOutputStream(config.getCaminhoFoto()+midia.getCodMidia().toString()+".jpg");
+                fos.write(midia.getImagem());
+                FileDescriptor fd = fos.getFD();
+                fos.flush();
+                fd.sync();
+                fos.close(); 
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+        }
         
     }
     public void novaMidia(){
@@ -267,6 +343,56 @@ public class MidiaBean  implements Serializable{
         }
         return "GerenciarMidias.xhtml?faces-redirect=true";
     } 
+    
+    
+    public String EditarMidia(){
+        
+        try {
+            
+            if (midiaEditar.getCategoria() == null){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Selecione uma Categoria", "Selecione uma Categoria"));
+                return null;
+            }
+            
+            midiaEditar.setDataCriacao(new Date(System.currentTimeMillis()));
+            
+            if (this.imagem != null){
+                byte[] ArraybytesImagem = imagem.getContents();
+                midiaEditar.setImagem(ArraybytesImagem);
+            }
+            
+            if (this.conteudo != null){
+                byte[] ArraybytesConteudo = conteudo.getContents();
+                midiaEditar.setConteudoMidia(ArraybytesConteudo);
+            }
+            
+            if(user == null || (user != null && user.getCodUsuario() == null)){
+                user = (User) SessionContext.getInstance().getAttribute("user");
+            }
+            
+            if(user.getCodUsuario().isEmpty()){
+                user.setCodUsuario("1");
+            }
+            
+            midiaEditar.setCodAutor(new GerenciarUsuariosService().buscaUsuario(Long.parseLong(user.getCodUsuario())));
+            
+            if (this.gerenciarMidiaService == null){
+                this.gerenciarMidiaService = new GerenciarMidiaService();
+            }
+            
+            
+            this.gerenciarMidiaService.editarMidia(midiaEditar);
+            
+            editavel = false;
+            FacesContext.getCurrentInstance().getExternalContext().redirect("GerenciarMidias.xhtml");
+        } catch (IOException ex) {
+            Logger.getLogger(MidiaBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "GerenciarMidias.xhtml?faces-redirect=true";
+    } 
+    
+    
+    
        
     public void CarregaImagem(FileUploadEvent event) {
         
@@ -351,7 +477,7 @@ public class MidiaBean  implements Serializable{
         isDesabilitado = false;
     }
     
-    public List<Midia> selecionarMidias(){
+    public List<midiasDTO> selecionarMidias(){
         
                isLivroGerencia = false;
                isPodcastGerencia = false;
@@ -381,12 +507,26 @@ public class MidiaBean  implements Serializable{
                isVideoGerencia= true;
         }
         
-         List<Midia> midiasPorTipo = new ArrayList<>();
+         List<midiasDTO> midiasPorTipo = new ArrayList<>();
         
         if (midiasUsuario != null){
             for (Midia midia1 : midiasUsuario) {
                 if(midia1.getTipoMidia().equalsIgnoreCase(tipo)){
-                    midiasPorTipo.add(midia1);
+                    midiasDTO midDTO= new midiasDTO();
+                    midDTO.setMid(midia1);
+                    midDTO.setIsCompra(false);
+                    midiasPorTipo.add(midDTO);
+                }
+            }
+        }
+        
+        if (midiasUsuarioCompra != null){
+            for (Midia midia1 : midiasUsuarioCompra) {
+                if(midia1.getTipoMidia().equalsIgnoreCase(tipo)){
+                    midiasDTO midDTO= new midiasDTO();
+                    midDTO.setMid(midia1);
+                    midDTO.setIsCompra(true);
+                    midiasPorTipo.add(midDTO);
                 }
             }
         }
@@ -399,6 +539,8 @@ public class MidiaBean  implements Serializable{
     public String labelConteudo(){
         if (conteudo != null){
            return "Substituir Conteudo";
+        }else if(editavel){
+            return "Substituir Imagem";
         }
         return "Selecione um Arquivo";
     }
@@ -406,10 +548,22 @@ public class MidiaBean  implements Serializable{
     public String labelImagem(){
         if (imagem != null){
            return "Substituir Imagem";
+        }else if(editavel){
+            return "Substituir Imagem";
         }
+        
         return "Selecione uma Imagem";
     }
     
+    
+    
+    public List<Midia> getMidiasUsuarioCompra() {
+        return midiasUsuarioCompra;
+    }
+
+    public void setMidiasUsuarioCompra(List<Midia> midiasUsuarioCompra) {
+        this.midiasUsuarioCompra = midiasUsuarioCompra;
+    }
     
      public boolean isIsLivro() {
         return isLivro;
@@ -542,5 +696,14 @@ public class MidiaBean  implements Serializable{
     public void setIsPodcast(boolean isPodcast) {
         this.isPodcast = isPodcast;
     } 
+    
+    public Midia getMidiaEditar() {
+        return midiaEditar;
+    }
+
+    public void setMidiaEditar(Midia midiaEditar) {
+        this.midiaEditar = midiaEditar;
+    }
+    
    
 }

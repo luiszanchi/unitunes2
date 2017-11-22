@@ -10,10 +10,8 @@ package br.com.unitunes.dao;
  * @author LuisFernandoTorriani
  */
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.TreeMap;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityManager;
@@ -21,9 +19,8 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.spi.PersistenceUnitTransactionType;
 
-public abstract class Dao<T, I extends Serializable> {
+public abstract class Dao<T, I extends Serializable>{
 
     public final static String user = "oracle_dba";
     private EntityManagerFactory factory;
@@ -32,7 +29,9 @@ public abstract class Dao<T, I extends Serializable> {
     public Dao(Class<T> persistedClass) {
         this.persistedClass = persistedClass;
     }
-
+    public Dao() {
+        
+    }
     protected void conectar() {
         this.factory = Persistence.createEntityManagerFactory("uniTunesPU");
     }
@@ -117,6 +116,15 @@ public abstract class Dao<T, I extends Serializable> {
         EntityManager em = this.getEntityManager();
         em.getTransaction().begin();
         List<T> retorno = em.createQuery(query).getResultList();
+        this.close();
+        return retorno;
+    }
+    
+        public List<T> getQueryListpaList(String query, String parameter) {
+        this.conectar();
+        EntityManager em = this.getEntityManager();
+        em.getTransaction().begin();
+        List<T> retorno = em.createQuery(query).setParameter("nomeMidia","%"+parameter+"%").getResultList();
         this.close();
         return retorno;
     }

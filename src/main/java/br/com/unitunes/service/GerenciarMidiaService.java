@@ -4,13 +4,14 @@ package br.com.unitunes.service;
 import br.com.unitunes.dao.MidiaDao;
 import br.com.unitunes.dao.UsuarioDao;
 import br.com.unitunes.entity.Midia;
+import java.io.Serializable;
 import java.util.List;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
 @ManagedBean(name = "gerService")
 @ApplicationScoped
-public class GerenciarMidiaService {
+public class GerenciarMidiaService implements Serializable {
     private MidiaDao ud;
     public List<Midia> midias(){
         if (ud == null){
@@ -53,20 +54,20 @@ public class GerenciarMidiaService {
             System.out.println("Midia não excluida");
     }
     
-      public List<Midia> buscarMidiasUsuario(String usuario){
+    public List<Midia> buscarMidiasUsuario(String usuario){
          if(ud == null){
             ud = new MidiaDao();
         }
         return ud.getQueryList("from Midia mid where mid.codAutor.codUsuario =" + usuario);
     }
       
-    public List<Midia> buscarMidiasCompra(String usuario){
+    public List<Midia> buscarMidiasUsuarioPesquisa(String usuario, String pesquisa){
          if(ud == null){
             ud = new MidiaDao();
         }
-        return ud.getQueryList("from Midia mid where mid.codAutor.codUsuario != " + usuario);
+        return ud.getQueryListpaList("from Midia mid where mid.codAutor.codUsuario =" + usuario +" and mid.nomeMidia like :nomeMidia", pesquisa);
     }
-    
+      
     public List<Midia> buscarMidiasComprav2(String usuario){
          if(ud == null){
             ud = new MidiaDao();
@@ -74,6 +75,21 @@ public class GerenciarMidiaService {
         return ud.getQueryList("from Midia mid where mid.codMidia not in "
                 + "(select cmp.codMidia from Compra cmp where cmp.codUsuario ="+ usuario +")"
                         + " and mid.codAutor.codUsuario != " + usuario);
+    }
+    public List<Midia> buscarMidiasCompra(String usuario){
+         if(ud == null){
+            ud = new MidiaDao();
+        }
+        return ud.getQueryList("from Midia mid where mid.codMidia in (select cmp.codMidia from Compra cmp where cmp.codUsuario ="+ usuario +")");
+    }
+    
+    
+     public List<Midia> buscarMidiasCompraPesquisa(String usuario,String pesquisa){
+         if(ud == null){
+            ud = new MidiaDao();
+        }
+        return ud.getQueryListpaList("from Midia mid where mid.codMidia in (select cmp.codMidia from Compra cmp where cmp.codUsuario ="+ usuario +")"
+                                                                            + " and mid.nomeMidia like :nomeMidia", pesquisa);
     }
     
 }
